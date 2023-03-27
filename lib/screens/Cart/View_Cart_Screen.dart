@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/DatabaseHelper.dart';
@@ -28,7 +33,13 @@ class ViewCartScreen extends StatefulWidget {
   @override
   State<ViewCartScreen> createState() => _ViewCartScreenState(items);
 }
+
 class _ViewCartScreenState extends State<ViewCartScreen> {
+  int _counter = 0;
+  Uint8List? _imageFile = null;
+
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
   final Map<String, CartItem> items;
   late Map<String, CartItem> ca;
   double total = 0.0;
@@ -38,7 +49,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   List<Cart_Check> list = [];
   DropdownEditingController<String> addressVal = DropdownEditingController();
   String addressId = "";
-  String route_id= "";
+  String route_id = "";
   TextEditingController remarksCont = TextEditingController();
 
   _ViewCartScreenState(this.items);
@@ -61,7 +72,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     String json = jsonEncode(list);
     print(json);
     showDialog(
-      // The user CANNOT close this dialog  by pressing outsite it
+        // The user CANNOT close this dialog  by pressing outsite it
         barrierDismissible: false,
         context: context,
         builder: (_) {
@@ -97,7 +108,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         payment_method_title: 'Cash On Delivery',
         order_items: json,
         created_by: user_id.toString()));
-        print(data);
+    print(data);
 
     /*request.headers.addAll(headers);
 
@@ -111,10 +122,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     }*/
     Navigator.of(context).pop();
     showGeneralDialog(
-        barrierColor:
-        Colors.black.withOpacity(0.5),
-        transitionBuilder:
-            (context, a1, a2, widget) {
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
           return Transform.scale(
             scale: a1.value,
             child: Opacity(
@@ -123,93 +132,73 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                   title: Text(
                     "Please Confirm",
                     style: TextStyle(
-                      fontWeight:
-                      FontWeight.w400,
-                      fontSize:
-                      12,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
                     ),
                   ),
-                  actionsAlignment:
-                  MainAxisAlignment
-                      .spaceAround,
+                  actionsAlignment: MainAxisAlignment.spaceAround,
                   content: Text(
                     "You Wants to share order on whatsapp",
                     style: TextStyle(
-                      fontWeight:
-                      FontWeight.w600,
-                      fontSize: MediaQuery.of(
-                          context)
-                          .size
-                          .width *
-                          0.03,
+                      fontWeight: FontWeight.w600,
+                      fontSize: MediaQuery.of(context).size.width * 0.03,
                     ),
                   ),
                   actions: <Widget>[
                     TextButton(
                         style: ButtonStyle(
                             backgroundColor:
-                            MaterialStateProperty
-                                .all(Colors
-                                .red)),
-                        onPressed: () {
-
+                                MaterialStateProperty.all(Colors.red)),
+                        onPressed: () async {
+                          await screenshotController
+                              .capture(delay: const Duration(milliseconds: 10))
+                              .then((Uint8List? image) async {
+                            if (image != null) {
+                              final directory =
+                                  await getApplicationDocumentsDirectory();
+                              final imagePath =
+                                  await File('${directory.path}/image.png')
+                                      .create();
+                              await imagePath.writeAsBytes(image);
+                              await Share.shareFiles([imagePath.path]);
+                            } else {
+                              print('somi');
+                            }
+                          });
                           print('samad');
                         },
                         child: Text(
                           "Yes",
                           style: TextStyle(
-                            color: Colors
-                                .white,
-                            fontFamily:
-                            'Nunito',
-                            fontWeight:
-                            FontWeight
-                                .w600,
-                            fontSize: MediaQuery.of(
-                                context)
-                                .size
-                                .width *
-                                0.03,
+                            color: Colors.white,
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w600,
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
                           ),
                         )),
                     TextButton(
                         style: ButtonStyle(
                             backgroundColor:
-                            MaterialStateProperty
-                                .all(Colors
-                                .grey)),
-                        onPressed: () =>
-                            Navigator.of(
-                                context)
-                                .pop(false),
+                                MaterialStateProperty.all(Colors.grey)),
+                        onPressed: () => Navigator.of(context).pop(false),
                         child: Text(
                           "No",
                           style: TextStyle(
-                            color: Colors
-                                .white,
-                            fontFamily:
-                            'Nunito',
-                            fontWeight:
-                            FontWeight
-                                .w600,
-                            fontSize: MediaQuery.of(
-                                context)
-                                .size
-                                .width *
-                                0.03,
+                            color: Colors.white,
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w600,
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
                           ),
                         )),
                   ],
                 )),
           );
         },
-        transitionDuration: const Duration(
-            milliseconds: 200),
+        transitionDuration: const Duration(milliseconds: 200),
         barrierDismissible: false,
         barrierLabel: '',
         context: context,
-        pageBuilder: (context, animation1,
-            animation2) {
+        pageBuilder: (context, animation1, animation2) {
           return const Text('PAGE BUILDER');
         });
     // Navigator.push(
@@ -220,11 +209,11 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
 
   Future<List<Address>> fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Address> response = await DatabaseHelper.instance.getAddress("${prefs.get('id')}");
+    List<Address> response =
+        await DatabaseHelper.instance.getAddress("${prefs.get('id')}");
     print(response);
     return response.toList();
   }
-
 
   @override
   void initState() {
@@ -237,7 +226,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         total = total + cartItem.price * cartItem.quantity;
         list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
             int.parse(cartItem.vid), cartItem.remarks.toString()));
-        print(list.length.toString()+"Remark");
+        print(list.length.toString() + "Remark");
       }
     });
     ca = items;
@@ -250,8 +239,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     var total = 0.0;
     List<Cart_Check> list = [];
     items.forEach((key, cartItem) {
-      list.add(Cart_Check(
-          int.parse(cartItem.pid), cartItem.quantity, int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
+      list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
+          int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
 
       total = total + cartItem.price * cartItem.quantity;
     });
@@ -260,21 +249,21 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
       create: (_) => new Cart(),
       child: Consumer<Cart>(builder: (context, cart, child) {
         print(items.length);
-
-            cart.items = ca;
-
-        return SafeArea(
-          child: Scaffold(
-            backgroundColor: Color(0xffefeeee),
-            appBar: AppBar(
-              centerTitle: true,
-              leading: const BackButton(color: Colors.black),
-              title: Text(
-                "Cart",
-                style: Theme.of(context).textTheme.bodyText1,
+        cart.items = ca;
+        return Screenshot(
+          controller: screenshotController,
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: Color(0xffefeeee),
+              appBar: AppBar(
+                centerTitle: true,
+                leading: const BackButton(color: Colors.black),
+                title: Text(
+                  "Cart",
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ),
-            ),
-            body: WillPopScope(
+              body: WillPopScope(
                 onWillPop: () async {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => HomeScreen(items)));
@@ -291,46 +280,46 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         items.length == 0
                             ? Column(children: [
-                          SizedBox(
-                            height: height * 0.03,
-                          ),
-                          Icon(
-                            Icons.shopping_cart_checkout_sharp,
-                            size: height * 0.3,
-                            color: Colors.green,
-                          ),
-                          Text(
-                            "Your cart is empty",
-                            style: TextStyle(
-                                color: Colors.black12,
-                                fontSize: width * 0.035,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ])
+                                SizedBox(
+                                  height: height * 0.03,
+                                ),
+                                Icon(
+                                  Icons.shopping_cart_checkout_sharp,
+                                  size: height * 0.3,
+                                  color: Colors.green,
+                                ),
+                                Text(
+                                  "Your cart is empty",
+                                  style: TextStyle(
+                                      color: Colors.black12,
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ])
                             : Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: width * 0.35,
-                              child: Text(
-                                "Items",
-                                style: TextStyle(
-                                    color: Colors.black26,
-                                    fontSize: width * 0.035,
-                                    fontWeight: FontWeight.w700),
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: width * 0.35,
+                                    child: Text(
+                                      "Items",
+                                      style: TextStyle(
+                                          color: Colors.black26,
+                                          fontSize: width * 0.035,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
                         items.length > 0
                             ? Container()
                             : SizedBox(
-                          height: height * 0.008,
-                        ),
+                                height: height * 0.008,
+                              ),
                         Container(
-                          height: height*.5,
+                          height: height * .2,
                           child: ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: items.length,
@@ -338,7 +327,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                 _controllers!.add(new TextEditingController());
                                 return Padding(
                                   padding:
-                                  const EdgeInsets.fromLTRB(0.0, 0, 0, 10),
+                                      const EdgeInsets.fromLTRB(0.0, 0, 0, 10),
                                   child: Row(
                                     children: [
                                       Container(
@@ -352,41 +341,48 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                         width: width * 0.8,
                                         height: height * 0.13,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Column(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   "${items.values.toList()[index].title.toString()}\nQuantity: ${items.values.toList()[index].quantity.toString()}\nUnit Price: ${items.values.toList()[index].price.toString()}\nSize: ${items.values.toList()[index].size.toString()}",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w300,
                                                     fontSize: width * 0.031,
                                                   ),
                                                 ),
-                                                Text("${items.values.toList()[index].color.toString()}",
+                                                Text(
+                                                  "${items.values.toList()[index].color.toString()}",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w300,
                                                     fontSize: width * 0.031,
-                                                  ),)
+                                                  ),
+                                                )
                                               ],
                                             ),
                                             Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                                  MainAxisAlignment.center,
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                                  CrossAxisAlignment.end,
                                               children: [
                                                 Text(
                                                   "Rs.${items.values.toList()[index].price * items.values.toList()[index].quantity}",
-                                                  style: TextStyle(overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     color: Color.fromRGBO(
                                                         36, 124, 38, 1),
                                                     fontSize: width * 0.03,
@@ -404,7 +400,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                         onTap: () {
                                           showGeneralDialog(
                                               barrierColor:
-                                              Colors.black.withOpacity(0.5),
+                                                  Colors.black.withOpacity(0.5),
                                               transitionBuilder:
                                                   (context, a1, a2, widget) {
                                                 return Transform.scale(
@@ -416,23 +412,23 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                           "Please Confirm",
                                                           style: TextStyle(
                                                             fontWeight:
-                                                            FontWeight.w400,
+                                                                FontWeight.w400,
                                                             fontSize:
-                                                            width * 0.04,
+                                                                width * 0.04,
                                                           ),
                                                         ),
                                                         actionsAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
+                                                            MainAxisAlignment
+                                                                .spaceAround,
                                                         content: Text(
                                                           "Are you sure you want to delete?",
                                                           style: TextStyle(
                                                             fontWeight:
-                                                            FontWeight.w600,
+                                                                FontWeight.w600,
                                                             fontSize: MediaQuery.of(
-                                                                context)
-                                                                .size
-                                                                .width *
+                                                                        context)
+                                                                    .size
+                                                                    .width *
                                                                 0.03,
                                                           ),
                                                         ),
@@ -440,62 +436,66 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                           TextButton(
                                                               style: ButtonStyle(
                                                                   backgroundColor:
-                                                                  MaterialStateProperty
-                                                                      .all(Colors
-                                                                      .red)),
+                                                                      MaterialStateProperty.all(
+                                                                          Colors
+                                                                              .red)),
                                                               onPressed: () {
                                                                 setState(() {
                                                                   items.remove(items
-                                                                      .keys
-                                                                      .toList()[
-                                                                  index]);
+                                                                          .keys
+                                                                          .toList()[
+                                                                      index]);
                                                                   Navigator.of(
-                                                                      context)
-                                                                      .pop(false);
+                                                                          context)
+                                                                      .pop(
+                                                                          false);
                                                                 });
                                                                 print('samad');
                                                               },
                                                               child: Text(
                                                                 "Yes",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                  'Nunito',
+                                                                      'Nunito',
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                                      FontWeight
+                                                                          .w600,
                                                                   fontSize: MediaQuery.of(
-                                                                      context)
-                                                                      .size
-                                                                      .width *
+                                                                              context)
+                                                                          .size
+                                                                          .width *
                                                                       0.03,
                                                                 ),
                                                               )),
                                                           TextButton(
                                                               style: ButtonStyle(
                                                                   backgroundColor:
-                                                                  MaterialStateProperty
-                                                                      .all(Colors
-                                                                      .grey)),
+                                                                      MaterialStateProperty.all(
+                                                                          Colors
+                                                                              .grey)),
                                                               onPressed: () =>
                                                                   Navigator.of(
-                                                                      context)
-                                                                      .pop(false),
+                                                                          context)
+                                                                      .pop(
+                                                                          false),
                                                               child: Text(
                                                                 "No",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                  'Nunito',
+                                                                      'Nunito',
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                                      FontWeight
+                                                                          .w600,
                                                                   fontSize: MediaQuery.of(
-                                                                      context)
-                                                                      .size
-                                                                      .width *
+                                                                              context)
+                                                                          .size
+                                                                          .width *
                                                                       0.03,
                                                                 ),
                                                               )),
@@ -503,20 +503,22 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                       )),
                                                 );
                                               },
-                                              transitionDuration: const Duration(
-                                                  milliseconds: 200),
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 200),
                                               barrierDismissible: false,
                                               barrierLabel: '',
                                               context: context,
                                               pageBuilder: (context, animation1,
                                                   animation2) {
-                                                return const Text('PAGE BUILDER');
+                                                return const Text(
+                                                    'PAGE BUILDER');
                                               });
                                         },
                                         child: Icon(
                                           Icons.delete,
                                           color: Colors.red,
-                                          size: height *0.03,
+                                          size: height * 0.03,
                                         ),
                                       ),
                                     ],
@@ -530,44 +532,44 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                         isFirstClick == true && isSecondClick == true
                             ? Container()
                             : Padding(
-                          padding: EdgeInsets.only(
-                              left: width * 0.08,
-                              right: width * 0.14,
-                              top: height * 0.04),
-                          child: Container(
-                            margin: const EdgeInsets.all(5.0),
-                            padding: const EdgeInsets.all(13.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black26),
-                                borderRadius: new BorderRadius.only(
-                                  topLeft: const Radius.circular(20.0),
-                                  topRight: const Radius.circular(20.0),
-                                  bottomLeft: const Radius.circular(20.0),
-                                  bottomRight:
-                                  const Radius.circular(20.0),
-                                )),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Total          ",
-                                  style: TextStyle(
-                                      color: Colors.black26,
-                                      fontSize: width * 0.035,
-                                      fontWeight: FontWeight.w700),
+                                padding: EdgeInsets.only(
+                                    left: width * 0.08,
+                                    right: width * 0.14,
+                                    top: height * 0.04),
+                                child: Container(
+                                  margin: const EdgeInsets.all(5.0),
+                                  padding: const EdgeInsets.all(13.0),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black26),
+                                      borderRadius: new BorderRadius.only(
+                                        topLeft: const Radius.circular(20.0),
+                                        topRight: const Radius.circular(20.0),
+                                        bottomLeft: const Radius.circular(20.0),
+                                        bottomRight:
+                                            const Radius.circular(20.0),
+                                      )),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total          ",
+                                        style: TextStyle(
+                                            color: Colors.black26,
+                                            fontSize: width * 0.035,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      Text(
+                                        "Rs. ${total}",
+                                        style: TextStyle(
+                                            color: Colors.black26,
+                                            fontSize: width * 0.035,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  "Rs. ${total}",
-                                  style: TextStyle(
-                                      color: Colors.black26,
-                                      fontSize: width * 0.035,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
                         SizedBox(
                           height: height * 0.01,
                         ),
@@ -586,23 +588,26 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 6),
                           child: Padding(
                             padding: const EdgeInsets.all(1.0),
-                            child:  DropdownSearch<Routes>(
+                            child: DropdownSearch<Routes>(
                               dropdownDecoratorProps: DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
                                   labelText: "Routes",
                                 ),
                               ),
                               asyncItems: (String filter) async {
-
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
                                 print(prefs.getString('id'));
-                                List<Routes> response = await DatabaseHelper.instance.getRoutes(prefs.getString('id')) ;
+                                List<Routes> response = await DatabaseHelper
+                                    .instance
+                                    .getRoutes(prefs.getString('id'));
                                 return response;
                               },
-                              itemAsString: (Routes a) => a.route_name.toLowerCase(),
+                              itemAsString: (Routes a) =>
+                                  a.route_name.toLowerCase(),
                               onChanged: (Routes? data) {
                                 route_id = data!.id.toString();
-                                print(route_id+"111111111111");
+                                print(route_id + "111111111111");
                               },
                             ),
                           ),
@@ -626,25 +631,26 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 6),
                           child: Padding(
                             padding: const EdgeInsets.all(1.0),
-                            child:  DropdownSearch<Address>(
+                            child: DropdownSearch<Address>(
                               dropdownDecoratorProps: DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
                                   labelText: "Address",
-
                                 ),
                               ),
-                              asyncItems: (String filter) async
-                              {
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                              asyncItems: (String filter) async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
                                 print(prefs.getString('id'));
-                                List<Address> response = await DatabaseHelper.instance.getAddress(route_id) ;
+                                List<Address> response = await DatabaseHelper
+                                    .instance
+                                    .getAddress(route_id);
                                 return response;
                               },
-
-                              itemAsString: (Address a) => a.address_a.toLowerCase(),
+                              itemAsString: (Address a) =>
+                                  a.address_a.toLowerCase(),
                               onChanged: (Address? data) {
                                 addressId = data!.id.toString();
-                                print(addressId+"111111111111");
+                                print(addressId + "111111111111");
                               },
                             ),
                           ),
@@ -676,10 +682,13 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             ),
                             onPressed: () {
                               if (items.length > 0) {
-                                addressId == "" ? Fluttertoast.showToast(msg: 'Please Select Address',
-                                    toastLength: Toast.LENGTH_LONG,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.black26) :   checkOut();
+                                addressId == ""
+                                    ? Fluttertoast.showToast(
+                                        msg: 'Please Select Address',
+                                        toastLength: Toast.LENGTH_LONG,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.black26)
+                                    : checkOut();
                               } else {
                                 Fluttertoast.showToast(
                                     msg: "Your Cart is Empty ",
@@ -700,7 +709,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                   fontSize:
-                                  MediaQuery.of(context).size.width * 0.035,
+                                      MediaQuery.of(context).size.width * 0.035,
                                 ),
                               ),
                             )),
@@ -726,14 +735,14 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                   ),
                 ),
               ),
-
+            ),
           ),
         );
       }),
     );
   }
 
- /* Future<Map<String, CartItem>> _navigateAndDisplaySelection3(
+  /* Future<Map<String, CartItem>> _navigateAndDisplaySelection3(
       BuildContext context, CartItem) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
