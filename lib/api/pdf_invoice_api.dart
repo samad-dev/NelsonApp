@@ -41,7 +41,7 @@ class PdfInvoiceApi {
                 width: 50,
                 child: BarcodeWidget(
                   barcode: Barcode.qrCode(),
-                  data: invoice.info.number,
+                  data: invoice.info.description,
                 ),
               ),
             ],
@@ -67,18 +67,15 @@ class PdfInvoiceApi {
       );
 
   static Widget buildInvoiceInfo(InvoiceInfo info) {
-    final paymentTerms = '${info.dueDate.difference(info.date).inDays} days';
+    final paymentTerms = '${info.description}';
     final titles = <String>[
-      'Invoice Number:',
+
       'Invoice Date:',
       'Payment Terms:',
-      'Due Date:'
     ];
     final data = <String>[
-      info.number,
       Utils.formatDate(info.date),
       paymentTerms,
-      Utils.formatDate(info.dueDate),
     ];
 
     return Column(
@@ -116,23 +113,23 @@ class PdfInvoiceApi {
 
   static Widget buildInvoice(Invoice invoice) {
     final headers = [
-      'Description',
-      'Date',
+      'Title',
+      'Color',
+      'Size',
       'Quantity',
-      'Unit Price',
-      'VAT',
+      'Price',
       'Total'
     ];
     final data = invoice.items.map((item) {
-      final total = item.unitPrice * item.quantity * (1 + item.vat);
+      final total = item.unitPrice * item.quantity;
 
       return [
-        item.description,
-        Utils.formatDate(item.date),
+        item.title,
+        item.color,
+        item.size,
         '${item.quantity}',
-        '\$ ${item.unitPrice}',
-        '${item.vat} %',
-        '\$ ${total.toStringAsFixed(2)}',
+        'Rs ${item.unitPrice}',
+        'Rs ${total.toStringAsFixed(2)}',
       ];
     }).toList();
 
@@ -158,9 +155,7 @@ class PdfInvoiceApi {
     final netTotal = invoice.items
         .map((item) => item.unitPrice * item.quantity)
         .reduce((item1, item2) => item1 + item2);
-    final vatPercent = invoice.items.first.vat;
-    final vat = netTotal * vatPercent;
-    final total = netTotal + vat;
+    final total = netTotal ;
 
     return Container(
       alignment: Alignment.centerRight,
@@ -175,11 +170,6 @@ class PdfInvoiceApi {
                 buildText(
                   title: 'Net total',
                   value: Utils.formatPrice(netTotal),
-                  unite: true,
-                ),
-                buildText(
-                  title: 'Vat ${vatPercent * 100} %',
-                  value: Utils.formatPrice(vat),
                   unite: true,
                 ),
                 Divider(),
@@ -210,8 +200,8 @@ class PdfInvoiceApi {
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(title: 'Address', value: invoice.supplier.address),
-          SizedBox(height: 1 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+          // SizedBox(height: 1 * PdfPageFormat.mm),
+          // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
         ],
       );
 

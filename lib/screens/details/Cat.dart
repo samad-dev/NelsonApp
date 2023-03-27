@@ -512,15 +512,24 @@ class _ProductDetails extends State<ProductDet> {
                                               numberFieldDecoration:InputDecoration(
 
                                                   filled: true,
-                                                  fillColor: Colors.white,
-                                                  enabledBorder:
-                                                  OutlineInputBorder(
+                                                  fillColor: ll[index].qtr != 'null' && ll[index].qtrp != '0'
+                                                      ? Colors.white
+                                                      : Colors.grey,
+                                                  disabledBorder: OutlineInputBorder(
+                                                    borderSide:
+                                                    const BorderSide(
+                                                        color: Colors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        5.0),
+                                                  ),
+                                                  enabledBorder: OutlineInputBorder(
 
                                                     borderSide: BorderSide(
                                                         width: 1,
                                                         color: Colors.white),
                                                   ),
-
                                                   focusedBorder:OutlineInputBorder(
                                                     borderSide:
                                                     const BorderSide(
@@ -779,7 +788,18 @@ class _ProductDetails extends State<ProductDet> {
                                               numberFieldDecoration:InputDecoration(
 
                                                   filled: true,
-                                                  fillColor: Colors.white,
+                                                  fillColor: ll[index].gln != 'null' && ll[index].glnp != '0'
+                                                      ? Colors.white
+                                                      : Colors.grey,
+                                                  disabledBorder: OutlineInputBorder(
+                                                    borderSide:
+                                                    const BorderSide(
+                                                        color: Colors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        5.0),
+                                                  ),
                                                   enabledBorder: OutlineInputBorder(
 
                                                     borderSide: BorderSide(

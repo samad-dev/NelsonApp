@@ -52,8 +52,11 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   bool isSecondClick = false;
   List<TextEditingController>? _controllers = [];
   List<Cart_Check> list = [];
+  List<InvoiceItem> litem = [];
   DropdownEditingController<String> addressVal = DropdownEditingController();
   String addressId = "";
+  String addressName = "";
+  String userName = "";
   String route_id = "";
   TextEditingController remarksCont = TextEditingController();
 
@@ -103,6 +106,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         });
     SharedPreferences pref = await SharedPreferences.getInstance();
     var user_id = pref.getString('id');
+     userName = pref.getString('username').toString();
+
     var data = DatabaseHelper.instance.addOrders(Orders(
         remarks: remarksCont.text.toString(),
         category_id: '2',
@@ -160,75 +165,24 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
 
                             final invoice = Invoice(
                               supplier: Supplier(
-                                name: 'Sarah Field',
-                                address: 'Sarah Street 9, Beijing, China',
-                                paymentInfo: 'https://paypal.me/sarahfieldzz',
+                                name: 'Nelson App',
+                                address: 'Plot 67, Mehran Town Sector 7 A Korangi Industrial Area, Karachi',
+                                paymentInfo: '',
                               ),
                               customer: Customer(
-                                name: 'Apple Inc.',
-                                address: 'Apple Street, Cupertino, CA 95014',
+                                name: userName,
+                                address: addressName,
                               ),
                               info: InvoiceInfo(
                                 date: date,
-                                dueDate: dueDate,
-                                description: 'My description...',
-                                number: '${DateTime.now().year}-9999',
+                                description: 'Cash On Delivery',
                               ),
-                              items: [
-                                InvoiceItem(
-                                  description: 'Coffee',
-                                  date: DateTime.now(),
-                                  quantity: 3,
-                                  vat: 0.19,
-                                  unitPrice: 5.99,
-                                ),
-                                InvoiceItem(
-                                  description: 'Water',
-                                  date: DateTime.now(),
-                                  quantity: 8,
-                                  vat: 0.19,
-                                  unitPrice: 0.99,
-                                ),
-                                InvoiceItem(
-                                  description: 'Orange',
-                                  date: DateTime.now(),
-                                  quantity: 3,
-                                  vat: 0.19,
-                                  unitPrice: 2.99,
-                                ),
-                                InvoiceItem(
-                                  description: 'Apple',
-                                  date: DateTime.now(),
-                                  quantity: 8,
-                                  vat: 0.19,
-                                  unitPrice: 3.99,
-                                ),
-                                InvoiceItem(
-                                  description: 'Mango',
-                                  date: DateTime.now(),
-                                  quantity: 1,
-                                  vat: 0.19,
-                                  unitPrice: 1.59,
-                                ),
-                                InvoiceItem(
-                                  description: 'Blue Berries',
-                                  date: DateTime.now(),
-                                  quantity: 5,
-                                  vat: 0.19,
-                                  unitPrice: 0.99,
-                                ),
-                                InvoiceItem(
-                                  description: 'Lemon',
-                                  date: DateTime.now(),
-                                  quantity: 4,
-                                  vat: 0.19,
-                                  unitPrice: 1.29,
-                                ),
-                              ],
+                              items: litem,
                             );
 
                             final pdfFile = await PdfInvoiceApi.generate(invoice);
-                            PdfApi.openFile(pdfFile);
+                            Share.shareFiles([pdfFile.path]);
+                            // PdfApi.openFile(pdfFile);
                             // PdfApi.saveDocument(pdfFile,);
 
                           // await screenshotController
@@ -261,7 +215,13 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.grey)),
-                        onPressed: () => Navigator.of(context).pop(false),
+                        onPressed: (){
+                          Navigator.of(context).pop(false);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen({})),
+                        );
+                        },
                         child: Text(
                           "No",
                           style: TextStyle(
@@ -300,6 +260,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   void initState() {
     super.initState();
     // profile();
+
     items.forEach((key, cartItem) {
       // print(i);
       if (list.contains(key)) {
@@ -322,7 +283,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     items.forEach((key, cartItem) {
       list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
           int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
-
+  litem.add(InvoiceItem(title: cartItem.title, color: cartItem.color, size: cartItem.size, quantity: cartItem.quantity, unitPrice: cartItem.price));
       total = total + cartItem.price * cartItem.quantity;
     });
 
@@ -731,6 +692,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                   a.address_a.toLowerCase(),
                               onChanged: (Address? data) {
                                 addressId = data!.id.toString();
+                                addressName = data!.address_a.toString();
                                 print(addressId + "111111111111");
                               },
                             ),
