@@ -97,7 +97,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         payment_method_title: 'Cash On Delivery',
         order_items: json,
         created_by: user_id.toString()));
-    print(data);
+        print(data);
 
     /*request.headers.addAll(headers);
 
@@ -110,10 +110,112 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
       print(response.reasonPhrase);
     }*/
     Navigator.of(context).pop();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen({})),
-    );
+    showGeneralDialog(
+        barrierColor:
+        Colors.black.withOpacity(0.5),
+        transitionBuilder:
+            (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            child: Opacity(
+                opacity: a1.value,
+                child: AlertDialog(
+                  title: Text(
+                    "Please Confirm",
+                    style: TextStyle(
+                      fontWeight:
+                      FontWeight.w400,
+                      fontSize:
+                      12,
+                    ),
+                  ),
+                  actionsAlignment:
+                  MainAxisAlignment
+                      .spaceAround,
+                  content: Text(
+                    "You Wants to share order on whatsapp",
+                    style: TextStyle(
+                      fontWeight:
+                      FontWeight.w600,
+                      fontSize: MediaQuery.of(
+                          context)
+                          .size
+                          .width *
+                          0.03,
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty
+                                .all(Colors
+                                .red)),
+                        onPressed: () {
+
+                          print('samad');
+                        },
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: Colors
+                                .white,
+                            fontFamily:
+                            'Nunito',
+                            fontWeight:
+                            FontWeight
+                                .w600,
+                            fontSize: MediaQuery.of(
+                                context)
+                                .size
+                                .width *
+                                0.03,
+                          ),
+                        )),
+                    TextButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty
+                                .all(Colors
+                                .grey)),
+                        onPressed: () =>
+                            Navigator.of(
+                                context)
+                                .pop(false),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            color: Colors
+                                .white,
+                            fontFamily:
+                            'Nunito',
+                            fontWeight:
+                            FontWeight
+                                .w600,
+                            fontSize: MediaQuery.of(
+                                context)
+                                .size
+                                .width *
+                                0.03,
+                          ),
+                        )),
+                  ],
+                )),
+          );
+        },
+        transitionDuration: const Duration(
+            milliseconds: 200),
+        barrierDismissible: false,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1,
+            animation2) {
+          return const Text('PAGE BUILDER');
+        });
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => HomeScreen({})),
+    // );
   }
 
   Future<List<Address>> fetchData() async {
@@ -531,8 +633,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
 
                                 ),
                               ),
-                              asyncItems: (String filter) async {
-
+                              asyncItems: (String filter) async
+                              {
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                 print(prefs.getString('id'));
                                 List<Address> response = await DatabaseHelper.instance.getAddress(route_id) ;
@@ -593,7 +695,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                   bottom: MediaQuery.of(context).size.height *
                                       0.022),
                               child: Text(
-                                "Continue to Checkout",
+                                "Place Order",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
