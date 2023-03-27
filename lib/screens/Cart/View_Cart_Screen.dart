@@ -15,7 +15,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Database/DatabaseHelper.dart';
 import '../../Database/group_sadqa_provider.dart';
+import '../../api/pdf_api.dart';
+import '../../api/pdf_invoice_api.dart';
 import '../../constants.dart';
+import '../../model/customer.dart';
+import '../../model/invoice.dart';
+import '../../model/supplier.dart';
 import '../../models/Orders.dart';
 import '../../models/Route_Name.dart';
 import '../../models/address.dart';
@@ -150,21 +155,97 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red)),
                         onPressed: () async {
-                          await screenshotController
-                              .capture(delay: const Duration(milliseconds: 10))
-                              .then((Uint8List? image) async {
-                            if (image != null) {
-                              final directory =
-                                  await getApplicationDocumentsDirectory();
-                              final imagePath =
-                                  await File('${directory.path}/image.png')
-                                      .create();
-                              await imagePath.writeAsBytes(image);
-                              await Share.shareFiles([imagePath.path]);
-                            } else {
-                              print('somi');
-                            }
-                          });
+                            final date = DateTime.now();
+                            final dueDate = date.add(Duration(days: 7));
+
+                            final invoice = Invoice(
+                              supplier: Supplier(
+                                name: 'Sarah Field',
+                                address: 'Sarah Street 9, Beijing, China',
+                                paymentInfo: 'https://paypal.me/sarahfieldzz',
+                              ),
+                              customer: Customer(
+                                name: 'Apple Inc.',
+                                address: 'Apple Street, Cupertino, CA 95014',
+                              ),
+                              info: InvoiceInfo(
+                                date: date,
+                                dueDate: dueDate,
+                                description: 'My description...',
+                                number: '${DateTime.now().year}-9999',
+                              ),
+                              items: [
+                                InvoiceItem(
+                                  description: 'Coffee',
+                                  date: DateTime.now(),
+                                  quantity: 3,
+                                  vat: 0.19,
+                                  unitPrice: 5.99,
+                                ),
+                                InvoiceItem(
+                                  description: 'Water',
+                                  date: DateTime.now(),
+                                  quantity: 8,
+                                  vat: 0.19,
+                                  unitPrice: 0.99,
+                                ),
+                                InvoiceItem(
+                                  description: 'Orange',
+                                  date: DateTime.now(),
+                                  quantity: 3,
+                                  vat: 0.19,
+                                  unitPrice: 2.99,
+                                ),
+                                InvoiceItem(
+                                  description: 'Apple',
+                                  date: DateTime.now(),
+                                  quantity: 8,
+                                  vat: 0.19,
+                                  unitPrice: 3.99,
+                                ),
+                                InvoiceItem(
+                                  description: 'Mango',
+                                  date: DateTime.now(),
+                                  quantity: 1,
+                                  vat: 0.19,
+                                  unitPrice: 1.59,
+                                ),
+                                InvoiceItem(
+                                  description: 'Blue Berries',
+                                  date: DateTime.now(),
+                                  quantity: 5,
+                                  vat: 0.19,
+                                  unitPrice: 0.99,
+                                ),
+                                InvoiceItem(
+                                  description: 'Lemon',
+                                  date: DateTime.now(),
+                                  quantity: 4,
+                                  vat: 0.19,
+                                  unitPrice: 1.29,
+                                ),
+                              ],
+                            );
+
+                            final pdfFile = await PdfInvoiceApi.generate(invoice);
+                            PdfApi.openFile(pdfFile);
+                            // PdfApi.saveDocument(pdfFile,);
+
+                          // await screenshotController
+                          //     .capture(delay: const Duration(milliseconds: 10))
+                          //     .then((Uint8List? image) async {
+                          //   if (image != null) {
+                          //     final directory =
+                          //         await getApplicationDocumentsDirectory();
+                          //     final imagePath =
+                          //         await File('${directory.path}/image.png')
+                          //             .create();
+                          //     await imagePath.writeAsBytes(image);
+                          //     await Share.shareFiles([imagePath.path]);
+                          //   } else {
+                          //     print('somi');
+                          //   }
+                          // });
                           print('samad');
                         },
                         child: Text(
