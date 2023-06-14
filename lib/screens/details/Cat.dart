@@ -775,7 +775,7 @@ class _ProductDetails extends State<ProductDet> {
                                           MediaQuery.of(context).size.height *
                                               0.09,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
+                                            padding: const EdgeInsets.all(3.0),
                                             child: NumberInputWithIncrementDecrement(
                                               decIconColor: Colors.white,
                                               incIconColor: Colors.white,
