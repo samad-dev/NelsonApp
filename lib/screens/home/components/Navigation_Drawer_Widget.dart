@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stylish/models/User_Routes.dart';
+import 'package:stylish/screens/Forms/formpage.dart';
 import 'package:stylish/screens/Login.dart';
 import 'package:stylish/screens/details/billing_adress_screen.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,7 @@ import 'package:stylish/screens/details/details_screen.dart';
 
 import '../../../Database/DatabaseHelper.dart';
 import '../../../Database/Product.dart';
+import '../../../main.dart';
 import '../../../models/Route_Name.dart';
 import '../../../models/Variations.dart';
 import '../../../models/address.dart';
@@ -97,6 +99,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                     icon: Icons.location_history,
                     onClicked: () => selectedItem(context, 1),
                   ),
+                 
                  /* const SizedBox(height: 16),
 
                   buildMenuItem2(
@@ -118,11 +121,18 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                     icon: Icons.shopping_cart,
                     onClicked: () => selectedItem(context, 3),
                   ),
+                  
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Logout',
                     icon: Icons.logout,
                     onClicked: () => selectedItem(context, 4),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Get Form',
+                    icon: Icons.location_history,
+                    onClicked: () => selectedItem(context, 5),
                   ),
                 ],
               ),
@@ -658,12 +668,14 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     switch (index) {
       case 0:
         print('Samad');
+        getForm();
         getAddress();
         getCategories();
         getp();
         getVariations();
         getUserRoutes();
         getRoutes();
+
         Fluttertoast.showToast(msg: 'All Data Import Completed');
 
         break;
@@ -692,6 +704,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
         //   builder: (context) => FavouritesPage(),
         // ));
         break;
+
     }
   }
 }

@@ -15,6 +15,7 @@ import 'package:is_first_run/is_first_run.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stylish/constants.dart';
+import 'package:stylish/model/inputFormModel.dart';
 import 'package:stylish/screens/home/home_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:stylish/screens/splash_screen.dart';
@@ -164,6 +165,31 @@ getUser() async {
           interval: token[i]['interval']));
     }
     Fluttertoast.showToast(msg: 'Getting Users');
+  } else {
+    Fluttertoast.showToast(msg: 'Check Your Internet Connection');
+    print(response.reasonPhrase);
+  }
+}
+
+
+getForm() async {
+  print('http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php');
+  var request = http.Request('GET',
+      Uri.parse('http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php'));
+  http.StreamedResponse response = await request.send();
+  if (response.statusCode == 200) {
+    String data = await response.stream.bytesToString();
+    var token = json.decode(data);
+    print(data);
+    await DatabaseHelper.instance.deleteUsers();
+    for (var i = 0; i < token.length; i++) {
+      print(token[i]['name']);
+      await DatabaseHelper.instance.addForms(InputForms(
+          formName: token[i]['form_name'],
+          formId: token[i]['form_id'],
+          apiResp: token[i]['data']));
+    }
+    Fluttertoast.showToast(msg: 'Getting Forms');
   } else {
     Fluttertoast.showToast(msg: 'Check Your Internet Connection');
     print(response.reasonPhrase);

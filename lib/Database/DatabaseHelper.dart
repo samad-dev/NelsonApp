@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
@@ -8,6 +9,8 @@ import 'package:path/path.dart' show join;
 import 'package:http/http.dart' as http;
 import 'package:stylish/models/User_Routes.dart';
 
+import '../model/OPFormModel.dart';
+import '../model/inputFormModel.dart';
 import '../models/New_Variations.dart';
 import '../models/Orders.dart';
 import '../models/Route_Name.dart';
@@ -77,7 +80,121 @@ class DatabaseHelper {
         (id INTEGER, category_id TEXT, order_date TEXT, total TEXT,
         address_a TEXT, address_id TEXT,payment_method TEXT, payment_method_title TEXT,
         order_items TEXT, remarks TEXT, created_by TEXT)''');
+    await db?.execute('''CREATE TABLE getForm 
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,formId TEXT, formName TEXT, apiResp TEXT)''');
+    await db?.execute('''CREATE TABLE IF NOT EXISTS showForm 
+ (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        formId TEXT, 
+        formname TEXT,
+        dataOutput TEXT)''');
   }
+
+
+
+  Future<List<InputForms>> getInputForms() async {
+    var db = await instance.db;
+    var forms = await db!.query(
+      'getForm',
+      columns: [
+        'formId',
+        'formName',
+        'apiResp',
+      ],
+    );
+    List<InputForms> InpformsList = forms.isNotEmpty
+        ? forms.map((e) => InputForms.fromMap(e)).toList()
+        : [];
+    return InpformsList;
+  }
+
+  Future<List<InputForms>> search(String kw) async {
+    var db = await instance.db;
+    var forms = await db!
+        .query('getForm', where: 'formName LIKE ?', whereArgs: ["%$kw%"]);
+    List<InputForms> InpformsList = forms.isNotEmpty
+        ? forms.map((e) => InputForms.fromMap(e)).toList()
+        : [];
+    return InpformsList;
+  }
+
+  Future<List<InputForms>> getOneFor(formName) async {
+    var db = await instance.db;
+    var forms = await db!.query('getForm',
+        columns: [
+          'formId',
+          'formName',
+          'apiResp',
+        ],
+        where: 'formId = ?',
+        whereArgs: [formName]);
+    List<InputForms> InpformsList = forms.isNotEmpty
+        ? forms.map((e) => InputForms.fromMap(e)).toList()
+        : [];
+    return InpformsList;
+  }
+
+  Future<int> addForms(
+      InputForms form,
+      ) async {
+    var db = await instance.db;
+    return await db!.insert(
+      'getForm',
+      form.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future delDb() async {
+    final db = await instance.db;
+    db!.delete('getForm');
+    db.delete('showForm');
+    print('DONE');
+  }
+
+  int cnt = 0;
+  Future<int> getCount() async {
+    Database? db = await this.db;
+    var result = await db!.query('getForm');
+    int count = result.length;
+    cnt = count;
+    print(cnt);
+    return count;
+  }
+
+  Future<int> addOPForms(OutputForms form, ctx) async {
+    var check = false;
+    var db = await instance.db;
+    check = !check;
+    if (check == true) {
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text('Added')));
+    }
+
+    return await db!.insert(
+      'showForm',
+      form.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<OutputForms>> getOPForms() async {
+    var db = await instance.db;
+    var forms = await db!.query(
+      'showForm',
+      columns: [
+        'formId',
+        'formname',
+        'dataOutput',
+      ],
+    );
+    List<OutputForms> formsList = forms.isNotEmpty
+        ? forms.map((e) => OutputForms.fromMap(e)).toList()
+        : [];
+    return formsList;
+  }
+
+
+
+
 
   Future<int> addProducts(
     Product1 add,

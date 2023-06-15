@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stylish/constants.dart';
 import 'package:stylish/screens/Cart/View_Cart_Screen.dart';
+import 'package:stylish/screens/Forms/formpage.dart';
 import 'package:stylish/screens/details/Cat.dart';
 
 import '../../Database/DatabaseHelper.dart';
@@ -16,6 +17,7 @@ import '../../models/Route_Name.dart';
 import '../../models/User_Routes.dart';
 import '../../models/address.dart';
 import '../../models/cart.dart';
+import '../Forms/form_list.dart';
 import '../Login.dart';
 import '../details/billing_adress_screen.dart';
 import '../details/details_screen.dart';
@@ -267,6 +269,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'Order Page',
                         icon: Icons.shopping_cart,
                         onClicked: () => selectedItem(context, 3),
+                      ),
+                      const SizedBox(height: 24),
+                      Divider(color: Colors.white70),
+                      const SizedBox(height: 24),
+                      buildMenuItem(
+                        text: 'Forms',
+                        icon: Icons.account_tree,
+                        onClicked: () => selectedItem(context, 5),
                       ),
                       const SizedBox(height: 24),
                       if(allow == true)
@@ -966,6 +976,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
+        getForm();
         getUser();
         print('Samad');
         getAddress();
@@ -974,6 +985,7 @@ class _HomeScreenState extends State<HomeScreen> {
         getVariations();
         getUserRoutes();
         getRoutes();
+
 
         Fluttertoast.showToast(msg: 'All Data Import Completed');
 
@@ -1009,6 +1021,13 @@ class _HomeScreenState extends State<HomeScreen> {
         // Navigator.of(context).push(MaterialPageRoute(
         //   builder: (context) => FavouritesPage(),
         // ));
+        break;
+      case 5:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OurFormPage()
+            ));
         break;
     }
   }
