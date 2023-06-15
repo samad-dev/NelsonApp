@@ -39,6 +39,7 @@ dependencies:
   share_plus: ^6.3.1
   pdf: ^3.1.0
   open_file: ^3.3.1
+  select_form_field: ^2.2.0
   image_gallery_saver: ^1.7.1
   shared_preferences: ^2.0.13
   sqflite: ^2.2.2

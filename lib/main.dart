@@ -181,7 +181,7 @@ getForm() async {
     String data = await response.stream.bytesToString();
     var token = json.decode(data);
     print(data);
-    await DatabaseHelper.instance.deleteUsers();
+    await DatabaseHelper.instance.delDb();
     for (var i = 0; i < token.length; i++) {
       print(token[i]['name']);
       await DatabaseHelper.instance.addForms(InputForms(

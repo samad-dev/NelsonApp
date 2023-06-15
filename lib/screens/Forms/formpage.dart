@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:select_form_field/select_form_field.dart';
 import '../../Database/DatabaseHelper.dart';
 import '../../model/OPFormModel.dart';
 import '../../model/inputFormModel.dart';
@@ -22,6 +23,7 @@ class _OurLocalState extends State<OurLocal> {
   var mySelection;
   var txt;
   var data;
+  List<String> selectedItemValue = [];
   late List<InputForms> data2;
   List<TextEditingController> controllerList = [];
   Map myText = {};
@@ -47,7 +49,7 @@ class _OurLocalState extends State<OurLocal> {
             onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.arrow_back_ios_new),
           ),
-          backgroundColor: Constants.mainColor,
+          backgroundColor: Color(0xfffd80031),
           title: Text(name),
           elevation: 0,
         ),
@@ -87,6 +89,8 @@ class _OurLocalState extends State<OurLocal> {
                                             name: rellyAStringList[ind]['name'],
                                             value: rellyAStringList[ind]
                                             ['value'],
+                                            values: rellyAStringList[ind]
+                                            ['values'],
                                             subtype: rellyAStringList[ind]
                                             ['subtype'],
                                             label: rellyAStringList[ind]
@@ -129,6 +133,7 @@ class _OurLocalState extends State<OurLocal> {
     required type,
     required name,
     required value,
+    required values,
     required subtype,
     required label,
     required required,
@@ -143,7 +148,8 @@ class _OurLocalState extends State<OurLocal> {
           style: TextStyle(fontSize: 28),
         ),
       );
-    } else if (type == "text") {
+    }
+    else if (type == "text") {
       return Padding(
         padding: EdgeInsets.symmetric(
           vertical: 10,
@@ -179,7 +185,32 @@ class _OurLocalState extends State<OurLocal> {
           }),
         ),
       );
-    } else if (type == "Buttons") {
+    }
+    else if (type == "select") {
+      var sa = json.encode(values);
+
+      List<Map<String, dynamic>> convertedList = jsonDecode(sa).cast<Map<String, dynamic>>();
+
+      print(convertedList);
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        child: SelectFormField(
+          type: SelectFormFieldType.dropdown,
+          icon: Icon(Icons.format_shapes),
+          labelText: label,
+          items: convertedList,
+          onChanged: (val) => {
+            myText.addAll({label: val})
+            },
+          onSaved: (val) => {
+            myText.addAll({label: val})
+          },
+        ),
+      );
+    }
+    else if (type == "Buttons") {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: ElevatedButton(

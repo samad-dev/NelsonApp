@@ -41,16 +41,16 @@ class _OurFormPageState extends State<OurFormPage> {
             onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.arrow_back_ios_new),
           ),
-          backgroundColor: Constants.mainColor,
-          actions: [
-            TextButton(
-                style: ButtonStyle(
-                    foregroundColor: MaterialStatePropertyAll(Colors.white)),
-                onPressed: () {
-                  setState(() {});
-                },
-                child: Text('Load Forms'))
-          ],
+          backgroundColor: Color(0xfffd80031),
+          // actions: [
+          //   TextButton(
+          //       style: ButtonStyle(
+          //           foregroundColor: MaterialStatePropertyAll(Colors.white)),
+          //       onPressed: () {
+          //         setState(() {});
+          //       },
+          //       child: Text('Load Forms'))
+          // ],
           title: Text('Forms'),
           elevation: 0,
         ),
@@ -61,13 +61,13 @@ class _OurFormPageState extends State<OurFormPage> {
             });
           },
           color: Colors.white,
-          backgroundColor: Constants.mainColor,
+          backgroundColor: Color(0xfffd80031),
           triggerMode: RefreshIndicatorTriggerMode.anywhere,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             child: Column(
               children: [
-                TextField(
+                /*TextField(
                   onChanged: (value) {
                     setState(() {
                       kw = value;
@@ -77,7 +77,7 @@ class _OurFormPageState extends State<OurFormPage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15)),
                       hintText: 'Search..'),
-                ),
+                ),*/
                 Expanded(
                     child: FutureBuilder(
                         future: DatabaseHelper.instance.getInputForms(),
