@@ -150,6 +150,12 @@ class DatabaseHelper {
     db.delete('showForm');
     print('DONE');
   }
+  Future delFormData() async {
+    final db = await instance.db;
+    db?.delete('showForm');
+    print('DONE');
+  }
+
 
   int cnt = 0;
   Future<int> getCount() async {

@@ -26,7 +26,9 @@ class _OurLocalState extends State<OurLocal> {
   List<String> selectedItemValue = [];
   late List<InputForms> data2;
   List<TextEditingController> controllerList = [];
-  Map myText = {};
+  Map<String, dynamic> myText = {};
+  Map<String, dynamic> jsonData = {};
+  List<Map<String, dynamic>> dataList = [];
   List header = List<String>.empty(growable: true);
   List txt1 = List<String>.empty(growable: true);
   List Buttons = List<String>.empty(growable: true);
@@ -198,7 +200,17 @@ class _OurLocalState extends State<OurLocal> {
         ),
         child: SelectFormField(
           type: SelectFormFieldType.dropdown,
-          icon: Icon(Icons.format_shapes),
+          decoration: InputDecoration(
+            labelText: label,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+          ),
           labelText: label,
           items: convertedList,
           onChanged: (val) => {
@@ -219,8 +231,16 @@ class _OurLocalState extends State<OurLocal> {
                 foregroundColor: Constants.mainColor),
             onPressed: myText.isNotEmpty
                 ? () {
+              dataList.add(myText);
+              print(dataList.toString());
+              // myText.forEach((key, value) {
+              //   jsonData['"$key"'] = value is String ? '"$value"' : value;
+              // });
+              // String jsonString = jsonEncode(jsonData);
+
+              // print(jsonString);
               DatabaseHelper.instance.addOPForms(
-                  OutputForms(formname: fName, dataOutput: myText),
+                  OutputForms(formId:widget.id,formname: fName, dataOutput: dataList.toString()),
                   context);
             }
                 : () => ScaffoldMessenger.of(context).showSnackBar(

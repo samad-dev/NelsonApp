@@ -22,6 +22,7 @@ import 'package:stylish/screens/splash_screen.dart';
 
 import 'Database/DatabaseHelper.dart';
 import 'Database/Product.dart';
+import 'model/OPFormModel.dart';
 import 'models/Orders.dart';
 import 'models/RecordLocationBody.dart';
 import 'models/Route_Name.dart';
@@ -38,6 +39,7 @@ Future<void> main() async {
   // await initializeService();
   bool firstRun = await IsFirstRun.isFirstRun();
   if (firstRun) {
+    getForm();
     getUser();
     getAddress();
     getCategories();
@@ -171,11 +173,13 @@ getUser() async {
   }
 }
 
-
 getForm() async {
-  print('http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php');
-  var request = http.Request('GET',
-      Uri.parse('http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php'));
+  print(
+      'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php');
+  var request = http.Request(
+      'GET',
+      Uri.parse(
+          'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -539,6 +543,7 @@ postData() {
   recordLocation();
 
   checkOutForSwitch();
+  PostFormData();
   postAddresses();
 }
 
@@ -612,6 +617,43 @@ checkOutForSwitch() async {
         }
         print("Count" + orderlist.length.toString());
         DatabaseHelper.instance.deleteOrders();
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "Oh, Looks like you're not connected to the internet",
+          backgroundColor: Colors.red);
+    }
+  } on SocketException catch (_) {
+    Fluttertoast.showToast(
+        msg: "Oh, Looks like you're not connected to the internet",
+        backgroundColor: Colors.red);
+  }
+}
+
+PostFormData() async {
+  List<OutputForms> orderlist = await DatabaseHelper.instance.getOPForms();
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      if (orderlist.length > 0) {
+        for (int a = 0; a < orderlist.length; a++) {
+          var request = http.Request(
+              'GET',
+              Uri.parse(
+                  'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/'
+                      'api/'
+                      'save_data.php?form_id=${orderlist[a].formId}&form_name=${orderlist[a].formname}&data=${orderlist[a].dataOutput}&created_by=1'));
+
+          http.StreamedResponse response = await request.send();
+          if (response.statusCode == 200) {
+            print(response.statusCode.toString());
+            Fluttertoast.showToast(msg: 'FORMS DATA UPLOADED');
+          } else {
+            print(response.reasonPhrase);
+          }
+        }
+        print("Count" + orderlist.length.toString());
+        DatabaseHelper.instance.delFormData();
       }
     } else {
       Fluttertoast.showToast(

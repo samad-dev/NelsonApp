@@ -117,13 +117,13 @@ class _OurFormPageState extends State<OurFormPage> {
                                 });
                           }
                         })),
-                TextButton(
+                /*TextButton(
                   onPressed: () {
                     DatabaseHelper.instance.delDb();
                     setState(() {});
                   },
                   child: Text('Delete DataBase'),
-                ),
+                ),*/
               ],
             ),
           ),
