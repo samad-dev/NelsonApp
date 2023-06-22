@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'package:select_form_field/select_form_field.dart';
 import '../../Database/DatabaseHelper.dart';
 import '../../model/OPFormModel.dart';
@@ -23,7 +24,11 @@ class _OurLocalState extends State<OurLocal> {
   var mySelection;
   var txt;
   var data;
-  List<String> selectedItemValue = [];
+  String _singleValue = "Text alignment right";
+   String _verticalGroupValue = '';
+  final Map myCategoryDynamic = {};
+
+  List<String> selectedOptions = [];
   late List<InputForms> data2;
   List<TextEditingController> controllerList = [];
   Map<String, dynamic> myText = {};
@@ -73,6 +78,7 @@ class _OurLocalState extends State<OurLocal> {
                             List<dynamic> rellyAStringList = abc;
                             for (var i in rellyAStringList) {
                               controllerList.add(TextEditingController());
+
                             }
                             return Container(
                               child: SingleChildScrollView(
@@ -147,7 +153,7 @@ class _OurLocalState extends State<OurLocal> {
       return Container(
         child: Text(
           label,
-          style: TextStyle(fontSize: 28),
+          style: TextStyle(fontSize: 28,),
         ),
       );
     }
@@ -185,6 +191,57 @@ class _OurLocalState extends State<OurLocal> {
             myText.addAll({label: controllerList[index].text});
             setState(() {});
           }),
+        ),
+      );
+    }
+    else if (type == "radio-group") {
+      String jsonString = values.toString();
+      List<String> sa = [];
+      // Remove square brackets at the beginning and end to get the inner content
+      String innerJson = jsonString.substring(1, jsonString.length - 1);
+
+      // Split the string into individual key-value pairs
+      List<String> keyValuePairs = innerJson.split(',');
+
+      // Extract the values and wrap them in inverted commas
+      List<String> val = keyValuePairs.map((pair) {
+        // Remove whitespace and curly braces from the key-value pair
+        String cleanedPair = pair.trim().replaceAll('{', '').replaceAll('}', '');
+        // Split the cleaned pair into key and value
+        List<String> parts = cleanedPair.split(':');
+        String value = parts[1].trim();
+        return '$value';
+      }).toList();
+      // _verticalGroupValue = List.generate(val.length, (index) =>'Other');
+  String value1;
+      // print(val.toSet().toList().toString());
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(fontSize: 18),
+            ),
+            RadioGroup<String>.builder(
+              groupValue: _verticalGroupValue,
+              onChanged: (va) => setState(() {
+                _verticalGroupValue = va!;
+                // _verticalGroupValue = va! as List<String>;
+
+                // selectedOptions[index] = _verticalGroupValue;
+                  myText.addAll({label: va});
+                print(myText);
+              }),
+              items: val.toSet().toList(),
+              itemBuilder: (item) => RadioButtonBuilder(
+                item,
+              ),
+            ),
+          ],
         ),
       );
     }
