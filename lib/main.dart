@@ -78,7 +78,7 @@ getAddress() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('https://p2ptrack.com/nelson_paints_p2/api/get/address.php'));
+      Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/address.php'));
   request.body = '''''';
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -141,7 +141,7 @@ getUser() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('https://p2ptrack.com/nelson_paints_p2/api/get/users.php'));
+      Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/users.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -175,11 +175,11 @@ getUser() async {
 
 getForm() async {
   print(
-      'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php');
+      'http://202.141.255.102:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php');
   var request = http.Request(
       'GET',
       Uri.parse(
-          'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/api/allform.php'));
+          'http://202.141.255.102:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -229,7 +229,7 @@ getCategories() async {
   var request = http.Request(
       'GET',
       Uri.parse(
-          'https://p2ptrack.com/nelson_paints_p2/api/get/get_all_categories.php'));
+          'x'));
   request.body = '''''';
 
   http.StreamedResponse response = await request.send();
@@ -280,7 +280,7 @@ getVariations() async {
   var VarRequest = http.Request(
       'GET',
       Uri.parse(
-          'https://p2ptrack.com/nelson_paints_p2/api/get/variations.php'));
+          'http://202.141.255.102:2528/nelson-paints-web/api/get/variations.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -323,7 +323,7 @@ getUserRoutes() async {
   var VarRequest = http.Request(
       'GET',
       Uri.parse(
-          'https://p2ptrack.com/nelson_paints_p2/api/get/user_routes.php'));
+          'http://202.141.255.102:2528/nelson-paints-web/api/get/user_routes.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -351,7 +351,7 @@ getUserRoutes() async {
 
 getRoutes() async {
   var VarRequest = http.Request('GET',
-      Uri.parse('https://p2ptrack.com/nelson_paints_p2/api/get/routes.php'));
+      Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/routes.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -403,7 +403,7 @@ getp() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('https://p2ptrack.com/nelson_paints_p2/api/get/products.php'));
+      Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/products.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -640,7 +640,7 @@ PostFormData() async {
           var request = http.Request(
               'GET',
               Uri.parse(
-                  'http://119.160.107.174:8080/testing_bsl/SimplePhpFormBuilder-1.6.0/'
+                  'http://202.141.255.102:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/'
                       'api/'
                       'save_data.php?form_id=${orderlist[a].formId}&form_name=${orderlist[a].formname}&data=${orderlist[a].dataOutput}&created_by=1'));
 

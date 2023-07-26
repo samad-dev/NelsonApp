@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getUser() async {
     var request = http.Request(
-        'GET', Uri.parse('https://p2ptrack.com/nelson_paints_p2/api/get/users.php'));
+        'GET', Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/users.php'));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String data = await response.stream.bytesToString();
