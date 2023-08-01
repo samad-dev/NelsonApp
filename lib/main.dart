@@ -555,7 +555,7 @@ postAddresses() async {
       var addressRequest = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://p2ptrack.com/nelson_paints_p2/api/get/create_address.php'));
+              'http://202.141.255.102:2528/nelson-paints-web/api/get/create_address.php'));
       addressRequest.fields.addAll({
         'user_id': addressList[a].user_id,
         'first_name': addressList[a].first_name,
@@ -595,7 +595,7 @@ checkOutForSwitch() async {
           var request = http.MultipartRequest(
               'POST',
               Uri.parse(
-                  'http://p2ptrack.com/nelson_paints_p2/api/get/get_order.php'));
+                  'http://202.141.255.102:2528/nelson-paints-web/api/get/get_order.php'));
           request.fields.addAll({
             'category_id': orderlist[a].category_id,
             'order_date': orderlist[a].order_date,
@@ -824,7 +824,7 @@ Future<void> recordLocation() async {
       var request = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://p2ptrack.com/nelson_paints_p2/api/get/create_position.php'));
+              'http://202.141.255.102:2528/nelson-paints-web/api/get/create_position.php'));
       request.fields.addAll({
         'user_id': _recordLocation.token.toString(),
         'lat': _recordLocation.latitude.toString(),
@@ -857,7 +857,7 @@ Future<void> recordLocation() async {
           var loopRequest = http.MultipartRequest(
               'POST',
               Uri.parse(
-                  'http://p2ptrack.com/nelson_paints_p2/api/get/create_position.php'));
+                  'http://202.141.255.102:2528/nelson-paints-web/api/get/create_position.php'));
           loopRequest.fields.addAll({
             'user_id': maps[i]['token'].toString(),
             'lat': maps[i]['latitude'].toString(),
