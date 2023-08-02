@@ -229,7 +229,7 @@ getCategories() async {
   var request = http.Request(
       'GET',
       Uri.parse(
-          'x'));
+          'http://202.141.255.102:2528/nelson-paints-web/api/get/get_all_categories.php'));
   request.body = '''''';
 
   http.StreamedResponse response = await request.send();
