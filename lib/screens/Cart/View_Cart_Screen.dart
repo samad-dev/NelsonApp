@@ -106,7 +106,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         });
     SharedPreferences pref = await SharedPreferences.getInstance();
     var user_id = pref.getString('id');
-     userName = pref.getString('username').toString();
+    userName = pref.getString('username').toString();
 
     var data = DatabaseHelper.instance.addOrders(Orders(
         remarks: remarksCont.text.toString(),
@@ -160,30 +160,31 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red)),
                         onPressed: () async {
-                            final date = DateTime.now();
-                            final dueDate = date.add(Duration(days: 7));
+                          final date = DateTime.now();
+                          final dueDate = date.add(Duration(days: 7));
 
-                            final invoice = Invoice(
-                              supplier: Supplier(
-                                name: 'Nelson App',
-                                address: 'Plot 67, Mehran Town Sector 7 A Korangi Industrial Area, Karachi',
-                                paymentInfo: '',
-                              ),
-                              customer: Customer(
-                                name: userName,
-                                address: addressName,
-                              ),
-                              info: InvoiceInfo(
-                                date: date,
-                                description: 'Cash On Delivery',
-                              ),
-                              items: litem,
-                            );
+                          final invoice = Invoice(
+                            supplier: Supplier(
+                              name: 'Nelson App',
+                              address:
+                                  'Plot 67, Mehran Town Sector 7 A Korangi Industrial Area, Karachi',
+                              paymentInfo: '',
+                            ),
+                            customer: Customer(
+                              name: userName,
+                              address: addressName,
+                            ),
+                            info: InvoiceInfo(
+                              date: date,
+                              description: 'Cash On Delivery',
+                            ),
+                            items: litem,
+                          );
 
-                            final pdfFile = await PdfInvoiceApi.generate(invoice);
-                            Share.shareFiles([pdfFile.path]);
-                            // PdfApi.openFile(pdfFile);
-                            // PdfApi.saveDocument(pdfFile,);
+                          final pdfFile = await PdfInvoiceApi.generate(invoice);
+                          Share.shareFiles([pdfFile.path]);
+                          // PdfApi.openFile(pdfFile);
+                          // PdfApi.saveDocument(pdfFile,);
 
                           // await screenshotController
                           //     .capture(delay: const Duration(milliseconds: 10))
@@ -215,12 +216,13 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.grey)),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop(false);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen({})),
-                        );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen({})),
+                          );
                         },
                         child: Text(
                           "No",
@@ -283,7 +285,12 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     items.forEach((key, cartItem) {
       list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
           int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
-  litem.add(InvoiceItem(title: cartItem.title, color: cartItem.color, size: cartItem.size, quantity: cartItem.quantity, unitPrice: cartItem.price));
+      litem.add(InvoiceItem(
+          title: cartItem.title,
+          color: cartItem.color,
+          size: cartItem.size,
+          quantity: cartItem.quantity,
+          unitPrice: cartItem.price));
       total = total + cartItem.price * cartItem.quantity;
     });
 
@@ -366,7 +373,9 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                               scrollDirection: Axis.vertical,
                               itemCount: items.length,
                               itemBuilder: (context, index) {
-                                var item_price = items.values.toList()[index].price * items.values.toList()[index].quantity;
+                                var item_price =
+                                    items.values.toList()[index].price *
+                                        items.values.toList()[index].quantity;
                                 _controllers!.add(new TextEditingController());
                                 return Padding(
                                   padding:
@@ -381,8 +390,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(width * 0.025)),
                                             color: Colors.white),
-                                        width: width * 0.8,
-                                        height: height * 0.13,
+                                        width: width * 0.6,
+                                        height: height * 0.15,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -412,16 +421,25 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                     fontWeight: FontWeight.w300,
                                                     fontSize: width * 0.031,
                                                   ),
-                                                )
+                                                ),
+                                                Text(
+                                                  "Total Amount: Rs.${item_price.toStringAsFixed(0)}",
+                                                  style: TextStyle(
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    color: Color.fromRGBO(
+                                                        36, 124, 38, 1),
+                                                    fontSize: width * 0.03,
+                                                  ),
+                                                ),
                                               ],
                                             ),
-                                            Column(
+                                            /*Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                
                                                 Text(
                                                   "Rs.${item_price.toStringAsFixed(0)}",
                                                   style: TextStyle(
@@ -433,12 +451,96 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                   ),
                                                 ),
                                               ],
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       ),
                                       SizedBox(
                                         width: 12,
+                                      ),
+                                      SizedBox(
+                                        width: width * 0.2,
+                                        height: height * 0.063,
+                                        child: TextField(
+                                          controller: _controllers![index],
+                                          onChanged: (val) {
+                                            items.update(
+                                                items.keys.toList()[index],
+                                                (existing) => CartItem(
+                                                      id: items.values
+                                                          .toList()[index]
+                                                          .id,
+                                                      price: existing.price,
+                                                      quantity: int.parse(val),
+                                                      title: existing.title,
+                                                      pid: existing.pid,
+                                                      vid: existing.vid,
+                                                      remarks: existing.remarks,
+                                                      size: existing.size,
+                                                      color: existing.color,
+                                                      variation_name: existing.variation_name,
+                                                      category_name: existing.category_name,
+
+                                                    ));
+                                            setState(() {
+                                             item_price =  items.values.toList()[index].price *
+                                                  int.parse(val);
+                                              items.values.toList()[index].quantity = int.parse(val);
+                                            });
+
+                                            // data.item1Total();
+                                            // data.addItem1PriceItem2Price();
+
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          textAlign: TextAlign.center,
+                                          cursorColor:
+                                              Color.fromRGBO(36, 124, 38, 1),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: width * 0.035,
+                                          ),
+                                          decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        width * 0.025),
+                                              ),
+                                              disabledBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        width * 0.025),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        width * 0.025),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        width * 0.025),
+                                              ),
+                                              filled: true,
+                                              hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: width * 0.035,
+                                              ),
+                                              hintText: items.values
+                                                  .toList()[index]
+                                                  .quantity
+                                                  .toString(),
+                                              fillColor: Colors.white),
+                                        ),
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -578,7 +680,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             : Padding(
                                 padding: EdgeInsets.only(
                                     left: width * 0.08,
-                                    right: width * 0.14,
+                                    right: width * 0.04,
                                     top: height * 0.04),
                                 child: Container(
                                   margin: const EdgeInsets.all(5.0),
