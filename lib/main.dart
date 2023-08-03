@@ -301,13 +301,13 @@ getVariations() async {
         size: tokenVariations[a]['size'],
         color_id: tokenVariations[a]['color_id'],
         colors: tokenVariations[a]['colors'],
-        price: tokenVariations[a]['price'],
-        price2: tokenVariations[a]['price2'],
-        price3: tokenVariations[a]['price3'],
-        price4: tokenVariations[a]['price4'],
-        price5: tokenVariations[a]['price5'],
-        price6: tokenVariations[a]['price6'],
-        price7: tokenVariations[a]['price7'],
+        price: double.parse(tokenVariations[a]['price']).toStringAsFixed(0).toString(),
+        price2: double.parse(tokenVariations[a]['price2']).toStringAsFixed(0).toString(),
+        price3: double.parse(tokenVariations[a]['price3']).toStringAsFixed(0).toString(),
+        price4: double.parse(tokenVariations[a]['price4']).toStringAsFixed(0).toString(),
+        price5: double.parse(tokenVariations[a]['price5']).toStringAsFixed(0).toString(),
+        price6: double.parse(tokenVariations[a]['price6']).toStringAsFixed(0).toString(),
+        price7: double.parse(tokenVariations[a]['price7']).toStringAsFixed(0).toString(),
       ));
       a++;
     }

@@ -502,6 +502,7 @@ class _ProductDetails extends State<ProductDet> {
                                             child: NumberInputWithIncrementDecrement(
                                               incIconColor: Colors.white,
                                               decIconColor: Colors.white,
+
                                               style: TextStyle(color: Colors.grey),
                                               widgetContainerDecoration: BoxDecoration(
                                                 border: Border.all(
@@ -723,7 +724,7 @@ class _ProductDetails extends State<ProductDet> {
                                                   ? true
                                                   : false,
                                               controller: _qcontrollers![index],
-                                              min: 0,
+
                                               scaleHeight: 0.65,
                                               incDecBgColor: Color(0xFFF67952),
                                               separateIcons: true,
@@ -1058,6 +1059,7 @@ class _ProductDetails extends State<ProductDet> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(3.0),
                                             child: NumberInputWithIncrementDecrement(
+                                              // initialValue: 3,
                                               decIconColor: Colors.white,
                                               incIconColor: Colors.white,
                                               widgetContainerDecoration: BoxDecoration(
@@ -1280,7 +1282,6 @@ class _ProductDetails extends State<ProductDet> {
                                                   ? true
                                                   : false,
                                               controller: _dcontrollers![index],
-                                              min: 0,
                                               scaleHeight: 0.65,
                                               incDecBgColor: Color(0xFFF67952),
                                               separateIcons: true,

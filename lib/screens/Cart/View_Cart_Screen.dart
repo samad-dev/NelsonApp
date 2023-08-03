@@ -366,6 +366,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                               scrollDirection: Axis.vertical,
                               itemCount: items.length,
                               itemBuilder: (context, index) {
+                                var item_price = items.values.toList()[index].price * items.values.toList()[index].quantity;
                                 _controllers!.add(new TextEditingController());
                                 return Padding(
                                   padding:
@@ -391,7 +392,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "${items.values.toList()[index].title.toString()}\nQuantity: ${items.values.toList()[index].quantity.toString()}\nUnit Price: ${items.values.toList()[index].price.toString()}\nSize: ${items.values.toList()[index].size.toString()}",
+                                                  "${items.values.toList()[index].title.toString()}\nQuantity: ${items.values.toList()[index].quantity.toString()}\nUnit Price: ${double.parse(items.values.toList()[index].price.toString()).toStringAsFixed(0)}\nSize: ${items.values.toList()[index].size.toString()}",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     overflow:
@@ -420,8 +421,9 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
+                                                
                                                 Text(
-                                                  "Rs.${items.values.toList()[index].price * items.values.toList()[index].quantity}",
+                                                  "Rs.${item_price.toStringAsFixed(0)}",
                                                   style: TextStyle(
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -602,7 +604,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                             fontWeight: FontWeight.w700),
                                       ),
                                       Text(
-                                        "Rs. ${total}",
+                                        "Rs. ${double.parse((total).toStringAsFixed(0))}",
                                         style: TextStyle(
                                             color: Colors.black26,
                                             fontSize: width * 0.035,
