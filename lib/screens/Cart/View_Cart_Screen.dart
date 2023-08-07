@@ -165,9 +165,9 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
 
                           final invoice = Invoice(
                             supplier: Supplier(
-                              name: 'Nelson App',
+                              name: '',
                               address:
-                                  'Plot 67, Mehran Town Sector 7 A Korangi Industrial Area, Karachi',
+                                  '',
                               paymentInfo: '',
                             ),
                             customer: Customer(
@@ -401,7 +401,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "${items.values.toList()[index].title.toString()}\nQuantity: ${items.values.toList()[index].quantity.toString()}\nUnit Price: ${double.parse(items.values.toList()[index].price.toString()).toStringAsFixed(0)}\nSize: ${items.values.toList()[index].size.toString()}",
+                                                  "${items.values.toList()[index].title.toString()}\nQuantity: ${items.values.toList()[index].quantity.toString()}\nUnit Price: ${NumberFormat.decimalPattern().format(items.values.toList()[index].price)}\nSize: ${items.values.toList()[index].size.toString()}",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     overflow:
@@ -423,7 +423,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Total Amount: Rs.${item_price.toStringAsFixed(0)}",
+                                                  "Total Amount: Rs.${NumberFormat.decimalPattern().format(item_price)}",
                                                   style: TextStyle(
                                                     overflow:
                                                     TextOverflow.ellipsis,
@@ -462,6 +462,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                         width: width * 0.2,
                                         height: height * 0.063,
                                         child: TextField(
+
                                           controller: _controllers![index],
                                           onChanged: (val) {
                                             items.update(
@@ -706,7 +707,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                             fontWeight: FontWeight.w700),
                                       ),
                                       Text(
-                                        "Rs. ${double.parse((total).toStringAsFixed(0))}",
+                                        "Rs. ${NumberFormat.decimalPattern().format(total)}",
                                         style: TextStyle(
                                             color: Colors.black26,
                                             fontSize: width * 0.035,

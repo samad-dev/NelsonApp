@@ -53,6 +53,7 @@ class _Details extends State<DetailsScreen> {
   int p_id = 0;
   late String c_id;
   String pname = "";
+  String price = "";
   var selected_color;
   String prodName = "";
   List<Product1> currentProdData = [];
@@ -248,7 +249,7 @@ class _Details extends State<DetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      /*Row(
                         children: [
                           Expanded(
                             child: Text(
@@ -258,11 +259,11 @@ class _Details extends State<DetailsScreen> {
                           ),
                           const SizedBox(width: defaultPadding),
                           Text(
-                            "Rs. " + product.price.toString(),
+                            "Rs. ${price}",
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
-                      ),
+                      ),*/
                       Padding(
                         padding: const EdgeInsets.all(1.0),
                         child:
