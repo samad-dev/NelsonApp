@@ -58,6 +58,8 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   String addressName = "";
   String userName = "";
   String route_id = "";
+  // String route_id = "";
+  String route_name = "";
   TextEditingController remarksCont = TextEditingController();
 
   _ViewCartScreenState(this.items);
@@ -76,6 +78,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   var bank;
   late String addrId;
   String? remarks;
+
   checkOut() async {
     String json = jsonEncode(list);
     print(json);
@@ -160,14 +163,24 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red)),
                         onPressed: () async {
+                          items.forEach((key, cartItem) {
+                            list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
+                                int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
+                            litem.add(InvoiceItem(
+                                title: cartItem.title,
+                                color: cartItem.color,
+                                size: cartItem.size,
+                                quantity: cartItem.quantity,
+                                unitPrice: cartItem.price));
+                            total = total + cartItem.price * cartItem.quantity;
+                          });
                           final date = DateTime.now();
                           final dueDate = date.add(Duration(days: 7));
 
                           final invoice = Invoice(
                             supplier: Supplier(
-                              name: '',
-                              address:
-                                  '',
+                              name: route_name,
+                              address: remarksCont.text.toString(),
                               paymentInfo: '',
                             ),
                             customer: Customer(
@@ -183,25 +196,12 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
 
                           final pdfFile = await PdfInvoiceApi.generate(invoice);
                           Share.shareFiles([pdfFile.path]);
-                          // PdfApi.openFile(pdfFile);
-                          // PdfApi.saveDocument(pdfFile,);
-
-                          // await screenshotController
-                          //     .capture(delay: const Duration(milliseconds: 10))
-                          //     .then((Uint8List? image) async {
-                          //   if (image != null) {
-                          //     final directory =
-                          //         await getApplicationDocumentsDirectory();
-                          //     final imagePath =
-                          //         await File('${directory.path}/image.png')
-                          //             .create();
-                          //     await imagePath.writeAsBytes(image);
-                          //     await Share.shareFiles([imagePath.path]);
-                          //   } else {
-                          //     print('somi');
-                          //   }
-                          // });
-                          print('samad');
+                          Navigator.of(context).pop(false);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => HomeScreen({})),
+                          );
                         },
                         child: Text(
                           "Yes",
@@ -283,14 +283,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     var total = 0.0;
     List<Cart_Check> list = [];
     items.forEach((key, cartItem) {
-      list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
-          int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
-      litem.add(InvoiceItem(
-          title: cartItem.title,
-          color: cartItem.color,
-          size: cartItem.size,
-          quantity: cartItem.quantity,
-          unitPrice: cartItem.price));
+
       total = total + cartItem.price * cartItem.quantity;
     });
 
@@ -426,7 +419,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                                   "Total Amount: Rs.${NumberFormat.decimalPattern().format(item_price)}",
                                                   style: TextStyle(
                                                     overflow:
-                                                    TextOverflow.ellipsis,
+                                                        TextOverflow.ellipsis,
                                                     color: Color.fromRGBO(
                                                         36, 124, 38, 1),
                                                     fontSize: width * 0.03,
@@ -462,36 +455,28 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                         width: width * 0.2,
                                         height: height * 0.063,
                                         child: TextField(
-
                                           controller: _controllers![index],
                                           onChanged: (val) {
-                                            items.update(
-                                                items.keys.toList()[index],
-                                                (existing) => CartItem(
-                                                      id: items.values
-                                                          .toList()[index]
-                                                          .id,
-                                                      price: existing.price,
-                                                      quantity: int.parse(val),
-                                                      title: existing.title,
-                                                      pid: existing.pid,
-                                                      vid: existing.vid,
-                                                      remarks: existing.remarks,
-                                                      size: existing.size,
-                                                      color: existing.color,
-                                                      variation_name: existing.variation_name,
-                                                      category_name: existing.category_name,
-
-                                                    ));
+                                            print('SOMI QUANTITY BEFORE'+items.values.toList()[index].quantity.toString());
                                             setState(() {
-                                             item_price =  items.values.toList()[index].price *
-                                                  int.parse(val);
                                               items.values.toList()[index].quantity = int.parse(val);
                                             });
+                                            print('SOMI QUANTITY AFTER'+items.values.toList()[index].quantity.toString());
+
+                                            print('SOMI LENGTH'+items.length.toString());
+
+                                            /*setState(() {
+                                              item_price = items.values
+                                                      .toList()[index]
+                                                      .price *
+                                                  int.parse(val);
+                                              items.values
+                                                  .toList()[index]
+                                                  .quantity = int.parse(val);
+                                            });*/
 
                                             // data.item1Total();
                                             // data.addItem1PriceItem2Price();
-
                                           },
                                           keyboardType: TextInputType.number,
                                           textAlign: TextAlign.center,
@@ -754,6 +739,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                   a.route_name.toLowerCase(),
                               onChanged: (Routes? data) {
                                 route_id = data!.id.toString();
+                                route_name = data.route_name.toString();
                                 print(route_id + "111111111111");
                               },
                             ),

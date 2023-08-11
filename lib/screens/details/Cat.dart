@@ -1119,6 +1119,7 @@ class _ProductDetails extends State<ProductDet> {
                                               onChanged: (value) {
                                                 if(value == 0)
                                                   {
+                                                    print('Samad ${ll[index].drm.toString()}');
                                                     _dcontrollers![index].clear();
                                                     print(value);
                                                     if (items.containsKey(
@@ -1175,7 +1176,9 @@ class _ProductDetails extends State<ProductDet> {
                                                   }
                                                 else
                                                   {
+                                                    print('Samad //////${ll[index].drm.toString()}');
                                                     print(value);
+
                                                     if (items.containsKey(
                                                         ll[index].drm.toString())) {
                                                       items.update(
