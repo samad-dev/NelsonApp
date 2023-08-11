@@ -47,7 +47,11 @@ class _Details extends State<DetailsScreen> {
   var gprice;
   var dprice;
   var qvid;
+  var qsku;
+  var gsku;
+  var dsku;
   var qvname;
+  var dvname;
   var gvid;
   var dvid;
   int p_id = 0;
@@ -293,6 +297,7 @@ class _Details extends State<DetailsScreen> {
                                   DrmDisabled = true;
                                   dprice = element.price;
                                   dvid = element.id.toString();
+                                  dvname = element.variationName.toString();
 
                                 });
 
@@ -305,7 +310,7 @@ class _Details extends State<DetailsScreen> {
                                   QtrDisabled = true;
                                   qprice = element.price;
                                   qvid = element.id.toString();
-
+                                  qvname = element.variationName;
                                 });
 
                               }
@@ -317,6 +322,7 @@ class _Details extends State<DetailsScreen> {
                                   GlnDisabled = true;
                                   gprice = element.price;
                                   gvid = element.id.toString();
+                                  gsku = element.variationName.toString();
 
                                 });
 
@@ -446,7 +452,7 @@ class _Details extends State<DetailsScreen> {
                                         title: pname.toString(),
                                         size: 'Drm',
                                         color: selected_color,
-                                        variation_name: qvname.toString(),
+                                        variation_name: dvname.toString(),
                                         category_name: product.category_id.toString(),
                                         remarks: remarksCont.text.toString()));
                                 // Fluttertoast.showToast(
@@ -471,7 +477,7 @@ class _Details extends State<DetailsScreen> {
                                         title: pname.toString(),
                                         size: 'Gln',
                                         color: selected_color,
-                                        variation_name: qvname.toString(),
+                                        variation_name: gsku.toString(),
                                         category_name: product.category_id.toString(),
                                         remarks: remarksCont.text.toString()));
                                 // Fluttertoast.showToast(

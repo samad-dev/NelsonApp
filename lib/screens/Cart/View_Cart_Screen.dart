@@ -167,7 +167,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             list.add(Cart_Check(int.parse(cartItem.pid), cartItem.quantity,
                                 int.parse(cartItem.vid), cartItem.remarks.toString().toString()));
                             litem.add(InvoiceItem(
-                                title: cartItem.title,
+                                title: cartItem.variation_name,
                                 color: cartItem.color,
                                 size: cartItem.size,
                                 quantity: cartItem.quantity,

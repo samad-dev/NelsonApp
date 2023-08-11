@@ -62,7 +62,7 @@ class PdfInvoiceApi {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Rremarks ${invoice.supplier.address}",
+                                Text("${invoice.supplier.name}",
                                     style: TextStyle(
                                         fontWeight: FontWeight.normal)),
                               ]
@@ -156,11 +156,9 @@ class PdfInvoiceApi {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("Remarks",
+                      Text("Remarks: ${invoice.supplier.address}",
                           style: TextStyle(fontWeight: FontWeight.normal)),
-                      Text(invoice.supplier.address,
-                          style: TextStyle(fontWeight: FontWeight.normal)),
-                      SizedBox(height: 3),
+
                     ]),
               ),
             ]),

@@ -297,7 +297,7 @@ getVariations() async {
         productId: tokenVariations[a]['product_id'],
         variationId: tokenVariations[a]['variation_id'],
         name: tokenVariations[a]['name'],
-        variationName: tokenVariations[a]['variation_name'],
+        variationName: tokenVariations[a]['sku'],
         size: tokenVariations[a]['size'],
         color_id: tokenVariations[a]['color_id'],
         colors: tokenVariations[a]['colors'],

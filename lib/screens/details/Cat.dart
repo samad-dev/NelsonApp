@@ -56,6 +56,8 @@ class _ProductDetails extends State<ProductDet> {
   var dprice;
   var qvid;
   var qvname;
+  var gvname;
+  var dvname;
   var gvid;
   var dvid;
   int p_id = 0;
@@ -600,8 +602,7 @@ class _ProductDetails extends State<ProductDet> {
                                                               .toString(),
                                                           size: 'Qtr',
                                                           color: ll[index].colors,
-                                                          variation_name:
-                                                          qvname.toString(),
+                                                          variation_name: ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -658,7 +659,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Qtr',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -712,7 +713,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Qtr',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -881,7 +882,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Gln',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -937,7 +938,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Gln',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -991,7 +992,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Gln',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -1166,7 +1167,7 @@ class _ProductDetails extends State<ProductDet> {
                                                               size: 'Drm',
                                                               color: ll[index].colors,
                                                               variation_name:
-                                                              qvname.toString(),
+                                                              ll[index].vaiation_name.toString(),
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -1223,7 +1224,7 @@ class _ProductDetails extends State<ProductDet> {
                                                               size: 'Drm',
                                                               color: ll[index].colors,
                                                               variation_name:
-                                                              qvname.toString(),
+                                                              ll[index].vaiation_name.toString(),
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -1280,7 +1281,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Drm',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -1335,7 +1336,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           size: 'Drm',
                                                           color: ll[index].colors,
                                                           variation_name:
-                                                          qvname.toString(),
+                                                          ll[index].vaiation_name.toString(),
                                                           category_name: product
                                                               .category_id
                                                               .toString(),

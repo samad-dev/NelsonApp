@@ -495,7 +495,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var VarRequest = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/variations.php'));
+            'http://202.141.255.102:2528/nelson-paints-web/api/get/variations.php?id=1'));
     http.StreamedResponse VarResponse = await VarRequest.send();
 
     if (VarResponse.statusCode == 200) {
@@ -506,13 +506,13 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
       print("Samad" + tokenVariations.length.toString());
       int a = 0;
       while (a < tokenVariations.length) {
-        print(tokenVariations[a]['variation_name']);
+        print(tokenVariations[a]['sku']);
         await DatabaseHelper.instance.addVaria(Variations(
             id: tokenVariations[a]['id'],
             productId: tokenVariations[a]['product_id'],
             variationId: tokenVariations[a]['variation_id'],
             name: tokenVariations[a]['name'],
-            variationName: tokenVariations[a]['variation_name'],
+            variationName: tokenVariations[a]['sku'],
             size: tokenVariations[a]['size'],
             color_id: tokenVariations[a]['color_id'],
             colors: tokenVariations[a]['colors'],

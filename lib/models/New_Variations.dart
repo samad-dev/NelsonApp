@@ -1,6 +1,7 @@
 class Variation_n {
   Variation_n({
     required this.colors,
+    required this.vaiation_name,
     required this.qtr,
     required this.gln,
     required this.drm,
@@ -11,6 +12,7 @@ class Variation_n {
   });
 
   String colors;
+  String vaiation_name;
   String qtr;
   String gln;
   String drm;
@@ -21,6 +23,7 @@ class Variation_n {
 
   factory Variation_n.fromMap(Map<String, dynamic> json) => Variation_n(
     colors: json["route_name"],
+    vaiation_name: json["variation_name"],
     qtr: json["qtr"],
     gln: json["gln"],
     drm: json["drm"],
