@@ -318,7 +318,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     //       );
     //     });
     var request = http.Request('GET',
-        Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/address.php'));
+        Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/address.php'));
     request.body = '''''';
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -381,7 +381,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     //       );
     //     });
     var request = http.Request('GET',
-        Uri.parse('http://202.141.255.102:2528/nelson-paints-web/api/get/users.php'));
+        Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/users.php'));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String data = await response.stream.bytesToString();
@@ -443,7 +443,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/get_all_categories.php'));
+            'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/get_all_categories.php'));
     request.body = '''''';
 
     http.StreamedResponse response = await request.send();
@@ -495,7 +495,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var VarRequest = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/variations.php?id=1'));
+            'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/variations.php?id=1'));
     http.StreamedResponse VarResponse = await VarRequest.send();
 
     if (VarResponse.statusCode == 200) {
@@ -540,7 +540,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var VarRequest = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/user_routes.php'));
+            'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/user_routes.php'));
     http.StreamedResponse VarResponse = await VarRequest.send();
 
     if (VarResponse.statusCode == 200) {
@@ -572,7 +572,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var VarRequest = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/routes.php'));
+            'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/routes.php'));
     http.StreamedResponse VarResponse = await VarRequest.send();
 
     if (VarResponse.statusCode == 200) {
@@ -626,7 +626,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://202.141.255.102:2528/nelson-paints-web/api/get/products.php'));
+            'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/products.php'));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String data = await response.stream.bytesToString();
