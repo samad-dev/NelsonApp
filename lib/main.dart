@@ -79,7 +79,7 @@ getAddress() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/address.php'));
+      Uri.parse('http://151.106.17.246:8080/nelson-paints-web/api/get/address.php'));
   request.body = '''''';
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -142,7 +142,7 @@ getUser() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/users.php'));
+      Uri.parse('http://151.106.17.246:8080/nelson-paints-web/api/get/users.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -176,11 +176,11 @@ getUser() async {
 
 getForm() async {
   print(
-      'http://sales.nelsonpaints.com:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php');
+      'http://151.106.17.246:8080/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php');
   var request = http.Request(
       'GET',
       Uri.parse(
-          'http://sales.nelsonpaints.com:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php'));
+          'http://151.106.17.246:8080/nelson-paints-web/SimplePhpFormBuilder-1.6.0/api/allform.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -230,7 +230,7 @@ getCategories() async {
   var request = http.Request(
       'GET',
       Uri.parse(
-          'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/get_all_categories.php'));
+          'http://151.106.17.246:8080/nelson-paints-web/api/get/get_all_categories.php'));
   request.body = '''''';
 
   http.StreamedResponse response = await request.send();
@@ -281,7 +281,7 @@ getVariations() async {
   var VarRequest = http.Request(
       'GET',
       Uri.parse(
-          'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/variations.php?id=1'));
+          'http://151.106.17.246:8080/nelson-paints-web/api/get/variations.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -324,7 +324,7 @@ getUserRoutes() async {
   var VarRequest = http.Request(
       'GET',
       Uri.parse(
-          'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/user_routes.php?id=1'));
+          'http://151.106.17.246:8080/nelson-paints-web/api/get/user_routes.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -352,7 +352,7 @@ getUserRoutes() async {
 
 getRoutes() async {
   var VarRequest = http.Request('GET',
-      Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/routes.php?id=1'));
+      Uri.parse('http://151.106.17.246:8080/nelson-paints-web/api/get/routes.php?id=1'));
   http.StreamedResponse VarResponse = await VarRequest.send();
 
   if (VarResponse.statusCode == 200) {
@@ -404,7 +404,7 @@ getp() async {
   //       );
   //     });
   var request = http.Request('GET',
-      Uri.parse('http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/products.php'));
+      Uri.parse('http://151.106.17.246:8080/nelson-paints-web/api/get/products.php'));
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
@@ -558,7 +558,7 @@ postAddresses() async {
       var addressRequest = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/create_address.php'));
+              'http://151.106.17.246:8080/nelson-paints-web/api/get/create_address.php'));
       addressRequest.fields.addAll({
         'user_id': addressList[a].user_id,
         'first_name': addressList[a].first_name,
@@ -598,7 +598,7 @@ checkOutForSwitch() async {
           var request = http.MultipartRequest(
               'POST',
               Uri.parse(
-                  'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/get_order.php'));
+                  'http://151.106.17.246:8080/nelson-paints-web/api/get/get_order.php'));
           request.fields.addAll({
             'category_id': orderlist[a].category_id,
             'order_date': orderlist[a].order_date,
@@ -643,7 +643,7 @@ PostFormData() async {
           var request = http.Request(
               'GET',
               Uri.parse(
-                  'http://sales.nelsonpaints.com:2528/nelson-paints-web/SimplePhpFormBuilder-1.6.0/'
+                  'http://151.106.17.246:8080/nelson-paints-web/SimplePhpFormBuilder-1.6.0/'
                       'api/'
                       'save_data.php?form_id=${orderlist[a].formId}&form_name=${orderlist[a].formname}&data=${orderlist[a].dataOutput}&created_by=1'));
 
@@ -827,7 +827,7 @@ Future<void> recordLocation() async {
       var request = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/create_position.php'));
+              'http://151.106.17.246:8080/nelson-paints-web/api/get/create_position.php'));
       request.fields.addAll({
         'user_id': _recordLocation.token.toString(),
         'lat': _recordLocation.latitude.toString(),
@@ -860,7 +860,7 @@ Future<void> recordLocation() async {
           var loopRequest = http.MultipartRequest(
               'POST',
               Uri.parse(
-                  'http://sales.nelsonpaints.com:2528/nelson-paints-web/api/get/create_position.php'));
+                  'http://151.106.17.246:8080/nelson-paints-web/api/get/create_position.php'));
           loopRequest.fields.addAll({
             'user_id': maps[i]['token'].toString(),
             'lat': maps[i]['latitude'].toString(),
