@@ -91,11 +91,15 @@ class _Details extends State<DetailsScreen> {
 
 
   Future<List<Product1>> getProductsPerCategory({required int cat_ID}) async {
+    print('hit ${cat_ID}');
     var db = await DatabaseHelper.instance.db;
     final List<Map<String, dynamic>> maps = await db!
         .query('products', where: 'category_id = ?', whereArgs: [cat_ID]);
-    prodList =
-    maps.isNotEmpty ? maps.map((e) => Product1.fromMap(e)).toList() : [];
+    setState(() {
+      prodList =
+      maps.isNotEmpty ? maps.map((e) => Product1.fromMap(e)).toList() : [];
+    });
+
     print("++++++++" + prodList.length.toString());
     return prodList;
   }
@@ -103,7 +107,7 @@ class _Details extends State<DetailsScreen> {
   _Details(/*this.product,*/this.items);
   @override
   Widget build(BuildContext context) {
-    if(product.category_id == '1')
+    /*if(product.category_id == '1')
     {
       image='assets/icons/extra.png';
     }
@@ -118,7 +122,7 @@ class _Details extends State<DetailsScreen> {
     if(product.category_id =='4')
     {
       image='assets/icons/exclusive.png';
-    }
+    }*/
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context)
@@ -156,6 +160,7 @@ class _Details extends State<DetailsScreen> {
                 height:MediaQuery.of(context).size.height * 0.07 ,
                 child: TextDropdownFormField(
                   controller: catVal,
+
                   options: catList.map((item) {
                     currentCatData = item;
                     return item.id + "-" + item.category_name.toLowerCase();
@@ -164,9 +169,10 @@ class _Details extends State<DetailsScreen> {
 
                     String ss = str.replaceAll(new RegExp(r'[^0-9]'), '');
                     c_id = ss.toString();
-                    getProductsPerCategory(
-                        cat_ID: int.parse(ss.toString()));
+
                     setState(() {
+                      getProductsPerCategory(
+                          cat_ID: int.parse(ss.toString()));
                       str = catVal.value;
                       print(catVal.value);
                     });
@@ -192,8 +198,8 @@ class _Details extends State<DetailsScreen> {
                     currentProdData = prodList;
                     return item.id.toString() + "-" + item.title;
                   }).toList(),
-                  onChanged: (dynamic str) {
-                    setState(() async {
+                  onChanged: (dynamic str) async {
+                    setState(()  {
 
                       DrmDisabled = false;
                       QtrDisabled = false;
@@ -207,9 +213,15 @@ class _Details extends State<DetailsScreen> {
                       print(pname);
                       p_id = int.parse(ss);
                       col = [];
-                      List<Variations> ll = await DatabaseHelper.instance
-                          .getVariationP(prodId: p_id.toString());
 
+
+                      str = prodVal.value;
+                      print("Checkkk" + searchProd);
+                    });
+
+                    List<Variations> ll = await DatabaseHelper.instance
+                        .getVariationP(prodId: p_id.toString());
+                    setState(() {
                       for (int a = 0; a < ll.length; a++) {
                         if (col.contains(ll[a].colors)) {
                         } else {
@@ -217,10 +229,8 @@ class _Details extends State<DetailsScreen> {
                           col.add(ll[a].colors);
                         }
                       }
-
-                      str = prodVal.value;
-                      print("Checkkk" + searchProd);
                     });
+
                   },
                   decoration: InputDecoration(
 
@@ -418,7 +428,8 @@ class _Details extends State<DetailsScreen> {
                           height: 48,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (qvid.toString() != 'null') {
+                              print("Qtr Value -- ${qvid} Gln Value -- ${gvid} Drm Value -- ${dvid}");
+                              if (qvid.toString() != 'null' && qtr.text.toString() != '') {
 
                                 items.putIfAbsent(
                                     rng.nextInt(100).toString(),
@@ -440,7 +451,7 @@ class _Details extends State<DetailsScreen> {
                                 qtr.clear();
                                 remarksCont.clear();
                               }
-                              if (dvid.toString() != 'null') {
+                              if (dvid.toString() != 'null' && drm.text.toString() != '') {
                                 items.putIfAbsent(
                                     dvid.toString(),
                                         () => CartItem(
@@ -464,7 +475,7 @@ class _Details extends State<DetailsScreen> {
                                 DrmDisabled = false;
                                 remarksCont.clear();
                               }
-                              if (gvid.toString() != 'null') {
+                              if (gvid.toString() != 'null' && gln.text.toString() != '') {
 
                                 items.putIfAbsent(
                                     gvid.toString(),

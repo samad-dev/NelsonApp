@@ -668,6 +668,9 @@ class DatabaseHelper {
 
   Future<List<Routes>> getRoutes(user_id) async {
     var db = await instance.db;
+    print('SELECT  r.* FROM user_routes ur  join routes r on r.id = ur.route_id where ur.user_id = ' +
+        user_id.toString() +
+        '');
     final List<Map<String, dynamic>> maps = await db!.rawQuery(
         'SELECT  r.* FROM user_routes ur  join routes r on r.id = ur.route_id where ur.user_id = ' +
             user_id.toString() +
