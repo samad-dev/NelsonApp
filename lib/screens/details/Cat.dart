@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:number_inc_dec/number_inc_dec.dart';
 import 'package:stylish/constants.dart';
 import 'package:stylish/models/Product.dart';
@@ -557,169 +558,201 @@ class _ProductDetails extends State<ProductDet> {
                                                   ),
                                                   hintText: 'Enter Quantity'),
 
-                                              onChanged: (value) {
+                                              onChanged: (value)
+                                              {
                                                 print(_qcontrollers![index].text.toString());
+                                                if(_qcontrollers![index].text.toString() == "0")
+                                                  {
+                                                    Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  }
+                                                else
+                                                  {
+                                                    if (items.containsKey(
+                                                        ll[index].qtr.toString())) {
+                                                      items.update(
+                                                          ll[index].qtr.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else {
+                                                      items.putIfAbsent(
+                                                          ll[index].qtr.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .qtr
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .qtrp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Qtr',
+                                                              color: ll[index].colors,
+                                                              variation_name: ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
 
-                                                if (items.containsKey(
-                                                    ll[index].qtr.toString())) {
-                                                  items.update(
-                                                      ll[index].qtr.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].qtr.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .qtr
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .qtrp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Qtr',
-                                                          color: ll[index].colors,
-                                                          variation_name: ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
-                                                }
+                                                    print(ll[index].colors);
+                                                    print(ll[index].qtr);
+                                                  }
 
-                                                print(ll[index].colors);
-                                                print(ll[index].qtr);
                                               },
 
-                                              onIncrement: (value) {
-                                                print(value);
-                                                if (items.containsKey(
-                                                    ll[index].qtr.toString())) {
-                                                  items.update(
-                                                      ll[index].qtr.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].qtr.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .qtr
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .qtrp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Qtr',
-                                                          color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
-                                                }
-                                                print(ll[index].colors);
-                                                print(ll[index].qtr);
+                                              onIncrement: (value)
+                                              {
+                                                if(_qcontrollers![index].text.toString() == "0")
+                                                  {
+                                                    Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  }
+                                                else
+                                                  {
+                                                    print(value);
+                                                    if (items.containsKey(ll[index].qtr.toString()))
+                                                    {
+                                                      items.update(
+                                                          ll[index].qtr.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else
+                                                    {
+                                                      items.putIfAbsent(
+                                                          ll[index].qtr.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .qtr
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .qtrp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Qtr',
+                                                              color: ll[index].colors,
+                                                              variation_name:
+                                                              ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                    print(ll[index].colors);
+                                                    print(ll[index].qtr);
+                                                  }
+
                                               },
-                                              onDecrement: (value) {
-                                                if (items.containsKey(
-                                                    ll[index].qtr.toString())) {
-                                                  items.update(
-                                                      ll[index].qtr.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].qtr.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .qtr
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .qtrp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Qtr',
-                                                          color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
+                                              onDecrement: (value)
+                                              {
+                                                if(_qcontrollers![index].text.toString() == "0")
+                                                {
+                                                  Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  items.remove(ll[index].qtr.toString());
                                                 }
+                                                else
+                                                  {
+                                                    if(items.containsKey(ll[index].qtr.toString()))
+                                                    {
+                                                      items.update(
+                                                          ll[index].qtr.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else
+                                                    {
+                                                      items.putIfAbsent(
+                                                          ll[index].qtr.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .qtr
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .qtrp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Qtr',
+                                                              color: ll[index].colors,
+                                                              variation_name:
+                                                              ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                  }
+
                                               },
                                               buttonArrangement:
                                               ButtonArrangement.rightEnd,
@@ -839,56 +872,67 @@ class _ProductDetails extends State<ProductDet> {
 
                                               onChanged: (value) {
                                                 print(value);
-                                                if (items.containsKey(
-                                                    ll[index].gln.toString())) {
-                                                  items.update(
-                                                      ll[index].gln.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].gln.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .gln
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .glnp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Gln',
-                                                          color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
+                                                if(_gcontrollers![index].text.toString() == "0")
+                                                {
+                                                  Fluttertoast.showToast(msg: '0 Amount Not Added/Updated in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  // items.remove(items.keys.toList()[index]);
                                                 }
+                                                else
+                                                  {
+                                                    if (items.containsKey(ll[index].gln.toString()))
+                                                    {
+                                                      items.update(
+                                                          ll[index].gln.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else
+                                                    {
+                                                      items.putIfAbsent(
+                                                          ll[index].gln.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .gln
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .glnp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Gln',
+                                                              color: ll[index].colors,
+                                                              variation_name:
+                                                              ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                  }
+
 
                                                 print(ll[index].colors);
                                                 print(ll[index].gln);
@@ -949,56 +993,67 @@ class _ProductDetails extends State<ProductDet> {
                                                 print(ll[index].qtr);
                                               },
                                               onDecrement: (value) {
-                                                if (items.containsKey(
-                                                    ll[index].gln.toString())) {
-                                                  items.update(
-                                                      ll[index].gln.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].gln.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .gln
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .glnp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Gln',
-                                                          color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
+                                                if(_gcontrollers![index].text.toString() == "0")
+                                                {
+                                                  Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  items.remove(ll[index].gln.toString());
                                                 }
+                                                else
+                                                  {
+                                                    if (items.containsKey(ll[index].gln.toString()))
+                                                    {
+                                                      items.update(
+                                                          ll[index].gln.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else
+                                                    {
+                                                      items.putIfAbsent(
+                                                          ll[index].gln.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .gln
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .glnp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Gln',
+                                                              color: ll[index].colors,
+                                                              variation_name:
+                                                              ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                  }
+
                                               },
                                               buttonArrangement:
                                               ButtonArrangement.rightEnd,
@@ -1056,9 +1111,7 @@ class _ProductDetails extends State<ProductDet> {
                                       ),
                                       Expanded(
                                         child: SizedBox(
-                                          height:
-                                          MediaQuery.of(context).size.height *
-                                              0.09,
+                                          height: MediaQuery.of(context).size.height * 0.09,
                                           child: Padding(
                                             padding: const EdgeInsets.all(3.0),
                                             child: NumberInputWithIncrementDecrement(
@@ -1118,122 +1171,178 @@ class _ProductDetails extends State<ProductDet> {
                                                   hintText: 'Enter Quantity'),
                                               style: TextStyle(color: Colors.grey),
                                               onChanged: (value) {
-                                                if(value == 0)
-                                                  {
-                                                    print('Samad ${ll[index].drm.toString()}');
-                                                    _dcontrollers![index].clear();
-                                                    print(value);
-                                                    if (items.containsKey(
-                                                        ll[index].drm.toString())) {
-                                                      items.update(
-                                                          ll[index].drm.toString(),
-                                                              (existing) => CartItem(
-                                                              id: existing.id,
-                                                              vid: existing.vid,
-                                                              pid: existing.pid,
-                                                              price: existing.price,
-                                                              quantity: int.parse(
-                                                                  value.toString()),
-                                                              title: existing.title,
-                                                              size: existing.size,
-                                                              color: existing.color,
-                                                              variation_name: existing
-                                                                  .variation_name,
-                                                              category_name: existing
-                                                                  .category_name,
-                                                              remarks:
-                                                              existing.remarks));
-                                                      print('updated');
-                                                    }
-                                                    else {
-                                                      items.putIfAbsent(
-                                                          ll[index].drm.toString(),
-                                                              () => CartItem(
-                                                              id: DateTime.now()
-                                                                  .toString(),
-                                                              vid: ll[index]
-                                                                  .drm
-                                                                  .toString(),
-                                                              pid:
-                                                              product.id.toString(),
-                                                              price: double.parse(
-                                                                  ll[index]
-                                                                      .drmp
-                                                                      .toString()),
-                                                              quantity: int.parse(
-                                                                  value.toString()),
-                                                              title: product.title
-                                                                  .toString(),
-                                                              size: 'Drm',
-                                                              color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
-                                                              category_name: product
-                                                                  .category_id
-                                                                  .toString(),
-                                                              remarks: ""));
-                                                      print('inserted');
-                                                    }
-                                                  }
+                                                if(_dcontrollers![index].text.toString() == "0")
+                                                {
+                                                  Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  // items.remove(ll[index].drm.toString());
+                                                }
                                                 else
-                                                  {
-                                                    print('Samad //////${ll[index].drm.toString()}');
+                                                {
+                                                  if (value == 0) {
+                                                    print('Samad ${ll[index].drm
+                                                        .toString()}');
+                                                    _dcontrollers![index]
+                                                        .clear();
                                                     print(value);
-
                                                     if (items.containsKey(
-                                                        ll[index].drm.toString())) {
+                                                        ll[index].drm
+                                                            .toString())) {
                                                       items.update(
-                                                          ll[index].drm.toString(),
-                                                              (existing) => CartItem(
-                                                              id: existing.id,
-                                                              vid: existing.vid,
-                                                              pid: existing.pid,
-                                                              price: existing.price,
-                                                              quantity: int.parse(
-                                                                  value.toString()),
-                                                              title: existing.title,
-                                                              size: existing.size,
-                                                              color: existing.color,
-                                                              variation_name: existing
-                                                                  .variation_name,
-                                                              category_name: existing
-                                                                  .category_name,
-                                                              remarks:
-                                                              existing.remarks));
+                                                          ll[index].drm
+                                                              .toString(),
+                                                              (existing) =>
+                                                              CartItem(
+                                                                  id: existing
+                                                                      .id,
+                                                                  vid: existing
+                                                                      .vid,
+                                                                  pid: existing
+                                                                      .pid,
+                                                                  price: existing
+                                                                      .price,
+                                                                  quantity: int
+                                                                      .parse(
+                                                                      value
+                                                                          .toString()),
+                                                                  title: existing
+                                                                      .title,
+                                                                  size: existing
+                                                                      .size,
+                                                                  color: existing
+                                                                      .color,
+                                                                  variation_name: existing
+                                                                      .variation_name,
+                                                                  category_name: existing
+                                                                      .category_name,
+                                                                  remarks:
+                                                                  existing
+                                                                      .remarks));
                                                       print('updated');
                                                     }
                                                     else {
                                                       items.putIfAbsent(
-                                                          ll[index].drm.toString(),
-                                                              () => CartItem(
-                                                              id: DateTime.now()
-                                                                  .toString(),
-                                                              vid: ll[index]
-                                                                  .drm
-                                                                  .toString(),
-                                                              pid:
-                                                              product.id.toString(),
-                                                              price: double.parse(
+                                                          ll[index].drm
+                                                              .toString(),
+                                                              () =>
+                                                              CartItem(
+                                                                  id: DateTime
+                                                                      .now()
+                                                                      .toString(),
+                                                                  vid: ll[index]
+                                                                      .drm
+                                                                      .toString(),
+                                                                  pid:
+                                                                  product.id
+                                                                      .toString(),
+                                                                  price: double
+                                                                      .parse(
+                                                                      ll[index]
+                                                                          .drmp
+                                                                          .toString()),
+                                                                  quantity: int
+                                                                      .parse(
+                                                                      value
+                                                                          .toString()),
+                                                                  title: product
+                                                                      .title
+                                                                      .toString(),
+                                                                  size: 'Drm',
+                                                                  color: ll[index]
+                                                                      .colors,
+                                                                  variation_name:
                                                                   ll[index]
-                                                                      .drmp
-                                                                      .toString()),
-                                                              quantity: int.parse(
-                                                                  value.toString()),
-                                                              title: product.title
-                                                                  .toString(),
-                                                              size: 'Drm',
-                                                              color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
-                                                              category_name: product
-                                                                  .category_id
-                                                                  .toString(),
-                                                              remarks: ""));
+                                                                      .vaiation_name
+                                                                      .toString(),
+                                                                  category_name: product
+                                                                      .category_id
+                                                                      .toString(),
+                                                                  remarks: ""));
                                                       print('inserted');
                                                     }
                                                   }
+                                                  else {
+                                                    print(
+                                                        'Samad //////${ll[index]
+                                                            .drm.toString()}');
+                                                    print(value);
 
-
+                                                    if (items.containsKey(
+                                                        ll[index].drm
+                                                            .toString())) {
+                                                      items.update(
+                                                          ll[index].drm
+                                                              .toString(),
+                                                              (existing) =>
+                                                              CartItem(
+                                                                  id: existing
+                                                                      .id,
+                                                                  vid: existing
+                                                                      .vid,
+                                                                  pid: existing
+                                                                      .pid,
+                                                                  price: existing
+                                                                      .price,
+                                                                  quantity: int
+                                                                      .parse(
+                                                                      value
+                                                                          .toString()),
+                                                                  title: existing
+                                                                      .title,
+                                                                  size: existing
+                                                                      .size,
+                                                                  color: existing
+                                                                      .color,
+                                                                  variation_name: existing
+                                                                      .variation_name,
+                                                                  category_name: existing
+                                                                      .category_name,
+                                                                  remarks:
+                                                                  existing
+                                                                      .remarks));
+                                                      print('updated');
+                                                    }
+                                                    else {
+                                                      items.putIfAbsent(
+                                                          ll[index].drm
+                                                              .toString(),
+                                                              () =>
+                                                              CartItem(
+                                                                  id: DateTime
+                                                                      .now()
+                                                                      .toString(),
+                                                                  vid: ll[index]
+                                                                      .drm
+                                                                      .toString(),
+                                                                  pid:
+                                                                  product.id
+                                                                      .toString(),
+                                                                  price: double
+                                                                      .parse(
+                                                                      ll[index]
+                                                                          .drmp
+                                                                          .toString()),
+                                                                  quantity: int
+                                                                      .parse(
+                                                                      value
+                                                                          .toString()),
+                                                                  title: product
+                                                                      .title
+                                                                      .toString(),
+                                                                  size: 'Drm',
+                                                                  color: ll[index]
+                                                                      .colors,
+                                                                  variation_name:
+                                                                  ll[index]
+                                                                      .vaiation_name
+                                                                      .toString(),
+                                                                  category_name: product
+                                                                      .category_id
+                                                                      .toString(),
+                                                                  remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                  }
+                                                }
                                                 print(ll[index].colors);
                                                 print(ll[index].gln);
                                               },
@@ -1293,56 +1402,65 @@ class _ProductDetails extends State<ProductDet> {
                                               },
 
                                               onDecrement: (value) {
-                                                if (items.containsKey(
-                                                    ll[index].drm.toString())) {
-                                                  items.update(
-                                                      ll[index].drm.toString(),
-                                                          (existing) => CartItem(
-                                                          id: existing.id,
-                                                          vid: existing.vid,
-                                                          pid: existing.pid,
-                                                          price: existing.price,
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: existing.title,
-                                                          size: existing.size,
-                                                          color: existing.color,
-                                                          variation_name: existing
-                                                              .variation_name,
-                                                          category_name: existing
-                                                              .category_name,
-                                                          remarks:
-                                                          existing.remarks));
-                                                  print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].drm.toString(),
-                                                          () => CartItem(
-                                                          id: DateTime.now()
-                                                              .toString(),
-                                                          vid: ll[index]
-                                                              .drm
-                                                              .toString(),
-                                                          pid:
-                                                          product.id.toString(),
-                                                          price: double.parse(
-                                                              ll[index]
-                                                                  .drmp
-                                                                  .toString()),
-                                                          quantity: int.parse(
-                                                              value.toString()),
-                                                          title: product.title
-                                                              .toString(),
-                                                          size: 'Drm',
-                                                          color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
-                                                          category_name: product
-                                                              .category_id
-                                                              .toString(),
-                                                          remarks: ""));
-                                                  print('inserted');
+                                                if(_dcontrollers![index].text.toString() == "0")
+                                                {
+                                                  Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
+                                                  items.remove(ll[index].drm.toString());
                                                 }
+                                                else
+                                                  {
+                                                    if (items.containsKey(ll[index].drm.toString())) {
+                                                      items.update(
+                                                          ll[index].drm.toString(),
+                                                              (existing) => CartItem(
+                                                              id: existing.id,
+                                                              vid: existing.vid,
+                                                              pid: existing.pid,
+                                                              price: existing.price,
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: existing.title,
+                                                              size: existing.size,
+                                                              color: existing.color,
+                                                              variation_name: existing
+                                                                  .variation_name,
+                                                              category_name: existing
+                                                                  .category_name,
+                                                              remarks:
+                                                              existing.remarks));
+                                                      print('updated');
+                                                    }
+                                                    else {
+                                                      items.putIfAbsent(
+                                                          ll[index].drm.toString(),
+                                                              () => CartItem(
+                                                              id: DateTime.now()
+                                                                  .toString(),
+                                                              vid: ll[index]
+                                                                  .drm
+                                                                  .toString(),
+                                                              pid:
+                                                              product.id.toString(),
+                                                              price: double.parse(
+                                                                  ll[index]
+                                                                      .drmp
+                                                                      .toString()),
+                                                              quantity: int.parse(
+                                                                  value.toString()),
+                                                              title: product.title
+                                                                  .toString(),
+                                                              size: 'Drm',
+                                                              color: ll[index].colors,
+                                                              variation_name:
+                                                              ll[index].vaiation_name.toString(),
+                                                              category_name: product
+                                                                  .category_id
+                                                                  .toString(),
+                                                              remarks: ""));
+                                                      print('inserted');
+                                                    }
+                                                  }
+
                                               },
                                               buttonArrangement:
                                               ButtonArrangement.rightEnd,

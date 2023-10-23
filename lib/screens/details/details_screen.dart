@@ -135,7 +135,7 @@ class _Details extends State<DetailsScreen> {
           centerTitle: true,
           leading: const BackButton(color: Colors.black),
           title: Text(
-            "Detials",
+            "Details",
             style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: [
@@ -429,10 +429,9 @@ class _Details extends State<DetailsScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               print("Qtr Value -- ${qvid} Gln Value -- ${gvid} Drm Value -- ${dvid}");
-                              if (qvid.toString() != 'null' && qtr.text.toString() != '') {
+                              if (qvid.toString() != 'null' && qtr.text.toString() != '' && qtr.text.toString() != '0') {
 
-                                items.putIfAbsent(
-                                    rng.nextInt(100).toString(),
+                                items.putIfAbsent(rng.nextInt(100).toString(),
                                         () => CartItem(
                                         id: DateTime.now().toString(),
                                         vid: qvid.toString(),
@@ -451,7 +450,7 @@ class _Details extends State<DetailsScreen> {
                                 qtr.clear();
                                 remarksCont.clear();
                               }
-                              if (dvid.toString() != 'null' && drm.text.toString() != '') {
+                              if (dvid.toString() != 'null' && drm.text.toString() != '' && drm.text.toString() != '0') {
                                 items.putIfAbsent(
                                     dvid.toString(),
                                         () => CartItem(
@@ -475,7 +474,7 @@ class _Details extends State<DetailsScreen> {
                                 DrmDisabled = false;
                                 remarksCont.clear();
                               }
-                              if (gvid.toString() != 'null' && gln.text.toString() != '') {
+                              if (gvid.toString() != 'null' && gln.text.toString() != '' && gln.text.toString() != '0') {
 
                                 items.putIfAbsent(
                                     gvid.toString(),

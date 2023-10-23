@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Constants {
   static Color mainColor = Color(0xff013678);
@@ -42,16 +41,14 @@ class Constants {
       primaryColor: lightPrimary,
       // cursorColor: lightAccent,
       scaffoldBackgroundColor: lightBackground,
-      textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
+     /* textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
       appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(
           color: lightAccent,
-        ),
-        toolbarTextStyle:
-            GoogleFonts.latoTextTheme(Theme.of(context).textTheme).bodyText2,
-        titleTextStyle:
-            GoogleFonts.latoTextTheme(Theme.of(context).textTheme).headline6,
-      ),
+        ),*/
+       /* titleTextStyle:
+            GoogleFonts.latoTextTheme(Theme.of(context).textTheme).headline6,*/
+      // ),
       colorScheme: ColorScheme.fromSwatch().copyWith(secondary: lightAccent),
     );
   }

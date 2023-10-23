@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 import 'light_color.dart';
 
-class TitleText extends StatelessWidget {
+/*class TitleText extends StatelessWidget {
   final String text;
   final double fontSize;
   final Color color;
@@ -19,4 +19,4 @@ class TitleText extends StatelessWidget {
         style: GoogleFonts.mulish(
             fontSize: fontSize, fontWeight: fontWeight, color: color));
   }
-}
+}*/
