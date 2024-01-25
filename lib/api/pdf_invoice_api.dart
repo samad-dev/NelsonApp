@@ -4,6 +4,7 @@ import 'package:number_to_words_english/number_to_words_english.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stylish/api/pdf_api.dart';
 
 import '../model/customer.dart';
@@ -13,6 +14,12 @@ import '../utils.dart';
 
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString("id")!;
+    // DateTime now = DateTime.now();
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    String now = dateFormat.format(DateTime.now());
+
     final pdf = Document();
     final netTotal = invoice.items
         .map((item) => item.unitPrice * item.quantity)
@@ -43,7 +50,7 @@ class PdfInvoiceApi {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Estimated_NO # CHLN101",
+                                  Text("Estimated_NO # CHLN${id}-${now.replaceAll(RegExp('[^A-Za-z0-9]'), '')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal)),
                                   Text("Messers: ${invoice.customer.address}",
@@ -278,7 +285,7 @@ class PdfInvoiceApi {
   static Widget buildCustomerAddress(InvoiceInfo customer) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Printing Date:- ${customer.date.toString()}",
+          Text("Printing Date:- ${DateFormat('yyyy-MM-dd kk:mm').format(customer.date)}",
               style: TextStyle(fontWeight: FontWeight.normal)),
           // Text(customer.address),
         ],

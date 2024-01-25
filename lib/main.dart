@@ -607,7 +607,8 @@ checkOutForSwitch() async {
             'payment_method': orderlist[a].payment_method,
             'payment_method_title': orderlist[a].payment_method_title,
             'order_items': orderlist[a].order_items,
-            'created_by': orderlist[a].created_by
+            'created_by': orderlist[a].created_by,
+            'remarks':orderlist[a].remarks
           });
           request.headers.addAll(headers);
           http.StreamedResponse response = await request.send();

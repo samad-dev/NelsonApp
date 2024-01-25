@@ -687,6 +687,9 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context) => BillingAddressScreen(),
         ));
         break;
+      case 2:
+        checkOutForSwitch();
+        break;
       case 3:
         Navigator.push(
             context,
@@ -700,6 +703,8 @@ class _HomeScreenState extends State<HomeScreen> {
         await prefs.remove('id');
         await prefs.remove('email');
         await prefs.remove('username');
+        await prefs.remove('region');
+        await prefs.clear();
         final service = FlutterBackgroundService();
         service.invoke("stopService");
         // googleAccount = await _googleSignIn.signOut();

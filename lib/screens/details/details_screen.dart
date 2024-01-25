@@ -370,6 +370,7 @@ class _Details extends State<DetailsScreen> {
 
                                     border: OutlineInputBorder(),
                                     labelText: 'Qtr Quantity',
+                                    labelStyle: TextStyle(fontSize: 13),
                                     hintText: 'Enter Quantity'),
                               ),
                             ),
@@ -388,6 +389,7 @@ class _Details extends State<DetailsScreen> {
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Gln Quantity',
+                                    labelStyle: TextStyle(fontSize: 13),
                                     hintText: 'Enter Quantity'),
                               ),
                             ),
@@ -405,6 +407,7 @@ class _Details extends State<DetailsScreen> {
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Drm Quantity',
+                                    labelStyle: TextStyle(fontSize: 12),
                                     hintText: 'Enter Quantity'),
                               ),
                             ),
@@ -448,7 +451,7 @@ class _Details extends State<DetailsScreen> {
 
                                 QtrDisabled = false;
                                 qtr.clear();
-                                remarksCont.clear();
+                                // remarksCont.clear();
                               }
                               if (dvid.toString() != 'null' && drm.text.toString() != '' && drm.text.toString() != '0') {
                                 items.putIfAbsent(
@@ -472,7 +475,7 @@ class _Details extends State<DetailsScreen> {
                                 //     toastLength: Toast.LENGTH_SHORT);
                                 drm.clear();
                                 DrmDisabled = false;
-                                remarksCont.clear();
+                                // remarksCont.clear();
                               }
                               if (gvid.toString() != 'null' && gln.text.toString() != '' && gln.text.toString() != '0') {
 
@@ -497,7 +500,7 @@ class _Details extends State<DetailsScreen> {
                                 //     toastLength: Toast.LENGTH_SHORT);
                                 gln.clear();
                                 GlnDisabled = false;
-                                remarksCont.clear();
+                                // remarksCont.clear();
                               }
                               setState(() {
                                 print('Samad');
@@ -505,6 +508,7 @@ class _Details extends State<DetailsScreen> {
 
                               });
                               print(product.title.toString()+ " is added to cart");
+                              remarksCont.clear();
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: primaryColor,

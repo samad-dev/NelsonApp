@@ -685,11 +685,17 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
         ));
         break;
 
+      case 2:
+       checkOutForSwitch();
+        break;
+
       case 4:
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('id');
         await prefs.remove('email');
         await prefs.remove('username');
+        await prefs.remove('region');
+        await prefs.clear();
         final service = FlutterBackgroundService();
         service.invoke("stopService");
         // googleAccount = await _googleSignIn.signOut();

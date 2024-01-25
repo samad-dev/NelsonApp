@@ -559,7 +559,7 @@ class _ProductDetails extends State<ProductDet> {
                                                   hintText: 'Enter Quantity'),
 
                                               onChanged: (value)
-                                              {
+                                              async {
                                                 print(_qcontrollers![index].text.toString());
                                                 if(_qcontrollers![index].text.toString() == "0")
                                                   {
@@ -567,8 +567,8 @@ class _ProductDetails extends State<ProductDet> {
                                                   }
                                                 else
                                                   {
-                                                    if (items.containsKey(
-                                                        ll[index].qtr.toString())) {
+                                                    if (items.containsKey(ll[index].qtr.toString()))
+                                                    {
                                                       items.update(
                                                           ll[index].qtr.toString(),
                                                               (existing) => CartItem(
@@ -590,6 +590,7 @@ class _ProductDetails extends State<ProductDet> {
                                                       print('updated');
                                                     }
                                                     else {
+                                                      String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].qtr);
                                                       items.putIfAbsent(
                                                           ll[index].qtr.toString(),
                                                               () => CartItem(
@@ -600,24 +601,18 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               pid:
                                                               product.id.toString(),
-                                                              price: double.parse(
-                                                                  ll[index]
-                                                                      .qtrp
-                                                                      .toString()),
-                                                              quantity: int.parse(
-                                                                  value.toString()),
-                                                              title: product.title
-                                                                  .toString(),
+                                                              price: double.parse(ll[index].qtrp.toString()),
+                                                              quantity: int.parse(value.toString()),
+                                                              title: product.title.toString(),
                                                               size: 'Qtr',
                                                               color: ll[index].colors,
-                                                              variation_name: ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
                                                               remarks: ""));
                                                       print('inserted');
                                                     }
-
                                                     print(ll[index].colors);
                                                     print(ll[index].qtr);
                                                   }
@@ -625,7 +620,7 @@ class _ProductDetails extends State<ProductDet> {
                                               },
 
                                               onIncrement: (value)
-                                              {
+                                              async {
                                                 if(_qcontrollers![index].text.toString() == "0")
                                                   {
                                                     Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
@@ -633,6 +628,8 @@ class _ProductDetails extends State<ProductDet> {
                                                 else
                                                   {
                                                     print(value);
+                                                    print("Samo-----------------${ll[index].qtr}");
+                                                    String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].qtr);
                                                     if (items.containsKey(ll[index].qtr.toString()))
                                                     {
                                                       items.update(
@@ -667,18 +664,14 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               pid:
                                                               product.id.toString(),
-                                                              price: double.parse(
-                                                                  ll[index]
-                                                                      .qtrp
-                                                                      .toString()),
+                                                              price: double.parse(ll[index].qtrp.toString()),
                                                               quantity: int.parse(
                                                                   value.toString()),
                                                               title: product.title
                                                                   .toString(),
                                                               size: 'Qtr',
                                                               color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -691,7 +684,7 @@ class _ProductDetails extends State<ProductDet> {
 
                                               },
                                               onDecrement: (value)
-                                              {
+                                              async {
                                                 if(_qcontrollers![index].text.toString() == "0")
                                                 {
                                                   Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
@@ -699,6 +692,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 }
                                                 else
                                                   {
+                                                    String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].qtr);
                                                     if(items.containsKey(ll[index].qtr.toString()))
                                                     {
                                                       items.update(
@@ -743,8 +737,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               size: 'Qtr',
                                                               color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -870,7 +863,7 @@ class _ProductDetails extends State<ProductDet> {
                                                   hintText: 'Enter Quantity'),
                                               style: TextStyle(color: Colors.grey),
 
-                                              onChanged: (value) {
+                                              onChanged: (value) async {
                                                 print(value);
                                                 if(_gcontrollers![index].text.toString() == "0")
                                                 {
@@ -879,6 +872,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 }
                                                 else
                                                   {
+                                                    String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].gln);
                                                     if (items.containsKey(ll[index].gln.toString()))
                                                     {
                                                       items.update(
@@ -923,8 +917,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               size: 'Gln',
                                                               color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -937,10 +930,10 @@ class _ProductDetails extends State<ProductDet> {
                                                 print(ll[index].colors);
                                                 print(ll[index].gln);
                                               },
-                                              onIncrement: (value) {
+                                              onIncrement: (value) async {
                                                 print(value);
-                                                if (items.containsKey(
-                                                    ll[index].gln.toString())) {
+                                                if (items.containsKey(ll[index].gln.toString()))
+                                                {
                                                   items.update(
                                                       ll[index].gln.toString(),
                                                           (existing) => CartItem(
@@ -961,6 +954,7 @@ class _ProductDetails extends State<ProductDet> {
                                                           existing.remarks));
                                                   print('updated');
                                                 } else {
+                                                  String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].gln);
                                                   items.putIfAbsent(
                                                       ll[index].gln.toString(),
                                                           () => CartItem(
@@ -981,8 +975,7 @@ class _ProductDetails extends State<ProductDet> {
                                                               .toString(),
                                                           size: 'Gln',
                                                           color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
+                                                          variation_name:variation_name,
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -992,7 +985,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 print(ll[index].colors);
                                                 print(ll[index].qtr);
                                               },
-                                              onDecrement: (value) {
+                                              onDecrement: (value) async {
                                                 if(_gcontrollers![index].text.toString() == "0")
                                                 {
                                                   Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
@@ -1000,6 +993,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 }
                                                 else
                                                   {
+                                                    String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].gln);
                                                     if (items.containsKey(ll[index].gln.toString()))
                                                     {
                                                       items.update(
@@ -1044,8 +1038,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               size: 'Gln',
                                                               color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),
@@ -1170,7 +1163,7 @@ class _ProductDetails extends State<ProductDet> {
                                                   ),
                                                   hintText: 'Enter Quantity'),
                                               style: TextStyle(color: Colors.grey),
-                                              onChanged: (value) {
+                                              onChanged: (value) async {
                                                 if(_dcontrollers![index].text.toString() == "0")
                                                 {
                                                   Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
@@ -1178,15 +1171,16 @@ class _ProductDetails extends State<ProductDet> {
                                                 }
                                                 else
                                                 {
+                                                  String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].drm);
+                                                  print(variation_name);
                                                   if (value == 0) {
                                                     print('Samad ${ll[index].drm
                                                         .toString()}');
                                                     _dcontrollers![index]
                                                         .clear();
                                                     print(value);
-                                                    if (items.containsKey(
-                                                        ll[index].drm
-                                                            .toString())) {
+                                                    if (items.containsKey(ll[index].drm.toString()))
+                                                    {
                                                       items.update(
                                                           ll[index].drm
                                                               .toString(),
@@ -1249,10 +1243,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   size: 'Drm',
                                                                   color: ll[index]
                                                                       .colors,
-                                                                  variation_name:
-                                                                  ll[index]
-                                                                      .vaiation_name
-                                                                      .toString(),
+                                                                  variation_name: variation_name,
                                                                   category_name: product
                                                                       .category_id
                                                                       .toString(),
@@ -1331,10 +1322,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   size: 'Drm',
                                                                   color: ll[index]
                                                                       .colors,
-                                                                  variation_name:
-                                                                  ll[index]
-                                                                      .vaiation_name
-                                                                      .toString(),
+                                                                  variation_name: variation_name,
                                                                   category_name: product
                                                                       .category_id
                                                                       .toString(),
@@ -1346,9 +1334,9 @@ class _ProductDetails extends State<ProductDet> {
                                                 print(ll[index].colors);
                                                 print(ll[index].gln);
                                               },
-                                              onIncrement: (value) {
-                                                if (items.containsKey(
-                                                    ll[index].drm.toString())) {
+                                              onIncrement: (value) async {
+                                                if (items.containsKey(ll[index].drm.toString()))
+                                                {
                                                   items.update(
                                                       ll[index].drm.toString(),
                                                           (existing) => CartItem(
@@ -1368,9 +1356,11 @@ class _ProductDetails extends State<ProductDet> {
                                                           remarks:
                                                           existing.remarks));
                                                   print('updated');
-                                                } else {
-                                                  items.putIfAbsent(
-                                                      ll[index].drm.toString(),
+                                                }
+                                                else {
+                                                  String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].drm);
+                                                  print(variation_name);
+                                                  items.putIfAbsent(ll[index].drm.toString(),
                                                           () => CartItem(
                                                           id: DateTime.now()
                                                               .toString(),
@@ -1389,8 +1379,7 @@ class _ProductDetails extends State<ProductDet> {
                                                               .toString(),
                                                           size: 'Drm',
                                                           color: ll[index].colors,
-                                                          variation_name:
-                                                          ll[index].vaiation_name.toString(),
+                                                          variation_name: variation_name,
                                                           category_name: product
                                                               .category_id
                                                               .toString(),
@@ -1401,7 +1390,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 print(ll[index].qtr);
                                               },
 
-                                              onDecrement: (value) {
+                                              onDecrement: (value) async {
                                                 if(_dcontrollers![index].text.toString() == "0")
                                                 {
                                                   Fluttertoast.showToast(msg: '0 Amount Not Added in Cart',backgroundColor: Colors.redAccent.shade100,textColor: Colors.black);
@@ -1409,6 +1398,7 @@ class _ProductDetails extends State<ProductDet> {
                                                 }
                                                 else
                                                   {
+                                                    String variation_name= await DatabaseHelper.instance.getvariationName(ll[index].drm);
                                                     if (items.containsKey(ll[index].drm.toString())) {
                                                       items.update(
                                                           ll[index].drm.toString(),
@@ -1422,10 +1412,8 @@ class _ProductDetails extends State<ProductDet> {
                                                               title: existing.title,
                                                               size: existing.size,
                                                               color: existing.color,
-                                                              variation_name: existing
-                                                                  .variation_name,
-                                                              category_name: existing
-                                                                  .category_name,
+                                                              variation_name: existing.variation_name,
+                                                              category_name: existing.category_name,
                                                               remarks:
                                                               existing.remarks));
                                                       print('updated');
@@ -1451,8 +1439,7 @@ class _ProductDetails extends State<ProductDet> {
                                                                   .toString(),
                                                               size: 'Drm',
                                                               color: ll[index].colors,
-                                                              variation_name:
-                                                              ll[index].vaiation_name.toString(),
+                                                              variation_name: variation_name,
                                                               category_name: product
                                                                   .category_id
                                                                   .toString(),

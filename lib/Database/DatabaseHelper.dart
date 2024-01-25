@@ -343,15 +343,15 @@ class DatabaseHelper {
     String que ="";
     if(prefs.getString('region').toString()=='1')
     {
-      que = "SELECT variation_name,colors,price||'-'||MAX(price) as price, MAX(CASE WHEN size = 'Drm' THEN price END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+      que = "SELECT variation_name,colors,price||'-'||MAX(price) as price, MAX(CASE WHEN size = 'Drm' THEN price END)  as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MIN(CASE WHEN size = 'Drm' THEN variation_id END) as drm, MIN(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MIN(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
           prodId +
-          " GROUP BY color_id ;";
+          " and price != 0 GROUP BY color_id ;";
     }
     if(prefs.getString('region').toString()=='3')
       {
          que = "SELECT variation_name,colors,price2||'-'||MAX(price2) as price, MAX(CASE WHEN size = 'Drm' THEN price2 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price2 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price2 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
             prodId +
-            " GROUP BY color_id ;";
+            " and price2 != 0 GROUP BY color_id ;";
       }
     if(prefs.getString('region').toString()=='4')
     {
@@ -384,10 +384,7 @@ class DatabaseHelper {
           " GROUP BY color_id ;";
     }
 
-    print(
-        "SELECT variation_name,colors,price||'-'||MAX(price) as price, MAX(CASE WHEN size = 'Drm' THEN price END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
-            prodId +
-            " GROUP BY color_id ;");
+    print(que);
     final List<Map<String, dynamic>> maps = await db!.rawQuery(que);
     print("_______________" + maps.length.toString());
     return List.generate(maps.length, (i) {
@@ -492,11 +489,66 @@ class DatabaseHelper {
 
   Future<List<Variation_n>> Searchbycolor(String str, String id) async {
     var db = await instance.db;
-    String que="SELECT colors,price||'-'||MAX(price) as price,variation_name, MAX(CASE WHEN size = 'Drm' THEN price END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
-        id +
-        " and colors like '%" +
-        str +
-        "%' GROUP BY color_id ";
+    // String que="SELECT colors,price||'-'||MAX(price) as price,variation_name, MAX(CASE WHEN size = 'Drm' THEN price END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+    //     id +
+    //     " and colors like '%" +
+    //     str +
+    //     "%' GROUP BY color_id ";
+
+    String  que ="";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getString('region').toString()=='1')
+    {
+      que = "SELECT variation_name,colors,price||'-'||MAX(price) as price, MAX(CASE WHEN size = 'Drm' THEN price END)  as drmp,MAX(CASE WHEN size = 'Gln' THEN price END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price END ) as qtrp, MIN(CASE WHEN size = 'Drm' THEN variation_id END) as drm, MIN(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MIN(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+        "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='3')
+    {
+      que = "SELECT variation_name,colors,price2||'-'||MAX(price2) as price, MAX(CASE WHEN size = 'Drm' THEN price2 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price2 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price2 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='4')
+    {
+      que = "SELECT variation_name,colors,price3||'-'||MAX(price3) as price, MAX(CASE WHEN size = 'Drm' THEN price3 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price3 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price3 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='5')
+    {
+      que = "SELECT variation_name,colors,price4||'-'||MAX(price4) as price, MAX(CASE WHEN size = 'Drm' THEN price4 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price4 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price4 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='6')
+    {
+      que = "SELECT variation_name,colors,price5||'-'||MAX(price5) as price, MAX(CASE WHEN size = 'Drm' THEN price5 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price5 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price5 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='7')
+    {
+      que = "SELECT variation_name,colors,price6||'-'||MAX(price6) as price, MAX(CASE WHEN size = 'Drm' THEN price6 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price6 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price6 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+    if(prefs.getString('region').toString()=='8')
+    {
+      que = "SELECT variation_name,colors,price7||'-'||MAX(price7) as price, MAX(CASE WHEN size = 'Drm' THEN price7 END ) as drmp,MAX(CASE WHEN size = 'Gln' THEN price7 END ) as glnp,MAX(CASE WHEN size = 'Qtr' THEN price7 END ) as qtrp, MAX(CASE WHEN size = 'Drm' THEN variation_id END ) as drm, MAX(CASE WHEN size = 'Gln' THEN variation_id END ) as gln, MAX(CASE WHEN size = 'Qtr' THEN variation_id END ) as qtr FROM variations where product_id = " +
+          id +" and colors like '%" +
+          str +
+          "%' GROUP BY color_id ;";
+    }
+
+    print(
+        que);
     final List<Map<String, dynamic>> maps = await db!.rawQuery(que);
     print(maps.length);
     return List.generate(maps.length, (i) {
@@ -637,6 +689,16 @@ class DatabaseHelper {
         description: maps[0]['description'],
         isFavourite: true,
         isPopular: true);
+
+    // Product1 = data;
+    // return data;
+  }
+
+  Future<String> getvariationName(String id) async {
+    var db = await DatabaseHelper.instance.db;
+    List<Map> maps =
+    await db!.query('variations', where: 'id = ?', whereArgs: [id]);
+    return maps[0]['variation_name'];
 
     // Product1 = data;
     // return data;
